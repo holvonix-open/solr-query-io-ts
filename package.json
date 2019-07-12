@@ -1,10 +1,10 @@
 {
-  "name": "hx-node-template",
+  "name": "solr-query-builder",
   "version": "0.1.0",
   "description": "TODO",
   "repository": {
     "type": "git",
-    "url": "https://github.com/holvonix-open/hx-node-template.git"
+    "url": "https://github.com/holvonix-open/solr-query-builder.git"
   },
   "keywords": [
     "TODO"

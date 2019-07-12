@@ -1,8 +1,8 @@
 /*
-# hx-node-template
+# solr-query-builder
 
 This product contains software originally developed by Holvonix LLC.
-Original Repository: https://github.com/holvonix-open/hx-node-template
+Original Repository: https://github.com/holvonix-open/solr-query-builder
 
 Copyright (c) 2019 Holvonix LLC. All rights reserved.
 
@@ -21,6 +21,4 @@ limitations under the License.
 Third-party dependencies may have their own licenses.
 */
 
-export function todo() {
-  return true;
-}
+export class SolrQueryBuilder {}
