@@ -11,7 +11,7 @@ import { Q } from 'solr-query-maker';
 
 // Returns the value of the `q` URL parameter for searching.
 function makeQuery() {
-  // '((geo:"Intersects(POINT (-122.17381 37.426002))" OR "spicy") OR product:([100 TO *] AND (NOT 600)))'
+  // '((geo:"Intersects(POINT (-122.17381 37.426002))" OR "spicy") OR title:He??o OR product:([100 TO *] AND (NOT 600)))'
   return Q.toString(
     Q.or(
       Q.term(
@@ -21,8 +21,9 @@ function makeQuery() {
           coordinates: [-122.17381, 37.426002],
         })
       ),
-      Q.defaultTerm('spicy'),
-      Q.term('product', Q.and(Q.closedRange(100, undefined), Q.not(600)))
+      Q.defaultTerm(Q.L('spicy')),
+      Q.term('title', Q.glob('He??o')),
+      Q.term('product', Q.and(Q.closedRange(100, undefined), Q.not(Q.L(600))))
     )
   );
 }
