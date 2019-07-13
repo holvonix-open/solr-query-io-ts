@@ -1,3 +1,5 @@
+import * as geojson from 'geojson';
+
 export interface Term<T extends Primitive> {
   type: 'term';
   field?: string;
@@ -46,7 +48,18 @@ export interface ConstantScore<T extends Primitive> {
   rhs: number;
 }
 
-export type Primitive = undefined | number | Date | string;
+export type SpatialOp = 'Intersects' | 'IsWithin' | 'Contains' | 'IsDisjointTo';
+export interface Spatial<T extends SpatialOp> {
+  type: 'spatial';
+  op: T;
+  value: geojson.Geometry;
+}
+export type Intersects = Spatial<'Intersects'>;
+export type IsWithin = Spatial<'IsWithin'>;
+export type Contains = Spatial<'Contains'>;
+export type IsDisjointTo = Spatial<'IsDisjointTo'>;
+
+export type Primitive = undefined | number | Date | string | Spatial<SpatialOp>;
 
 export type Clause<T extends Primitive> =
   | Term<T>

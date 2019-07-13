@@ -1,4 +1,5 @@
 import * as assert from 'assert';
+import * as Terraformer from 'terraformer';
 import { Q } from '../src/index';
 
 describe('Q', () => {
@@ -400,6 +401,37 @@ describe('Q', () => {
         Q.toString(Q.or(lhs, rhs, rhs2, rhs3)),
         '((("LHS" OR "RHS") OR "RHS2") OR "RHS3")'
       );
+    });
+
+    describe('spatial', () => {
+      const obj = new Terraformer.Polygon([
+        [[10.0, 0.0], [101.0, 21.0], [60.0, 1.024], [10.0, 0.0]],
+        [[0, 0], [-10, -10], [20, 30], [0, 0]],
+      ]);
+      it('intersects', () => {
+        assert.deepStrictEqual(
+          Q.toString(Q.term('geo', Q.spatial.intersects(obj))),
+          'geo:"Intersects(POLYGON ((10 0, 101 21, 60 1.024, 10 0), (0 0, -10 -10, 20 30, 0 0)))"'
+        );
+      });
+      it('contains', () => {
+        assert.deepStrictEqual(
+          Q.toString(Q.term('geo', Q.spatial.contains(obj))),
+          'geo:"Contains(POLYGON ((10 0, 101 21, 60 1.024, 10 0), (0 0, -10 -10, 20 30, 0 0)))"'
+        );
+      });
+      it('isDisjointTo', () => {
+        assert.deepStrictEqual(
+          Q.toString(Q.term('geo', Q.spatial.isDisjointTo(obj))),
+          'geo:"IsDisjointTo(POLYGON ((10 0, 101 21, 60 1.024, 10 0), (0 0, -10 -10, 20 30, 0 0)))"'
+        );
+      });
+      it('isWithin', () => {
+        assert.deepStrictEqual(
+          Q.toString(Q.term('geo', Q.spatial.isWithin(obj))),
+          'geo:"IsWithin(POLYGON ((10 0, 101 21, 60 1.024, 10 0), (0 0, -10 -10, 20 30, 0 0)))"'
+        );
+      });
     });
 
     it('works on complex tree', () => {
