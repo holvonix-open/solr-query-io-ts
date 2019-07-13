@@ -1,6 +1,6 @@
 {
   "name": "solr-query-maker",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A Solr Query builder and types",
   "repository": {
     "type": "git",
