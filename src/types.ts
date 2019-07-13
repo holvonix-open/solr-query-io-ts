@@ -2,8 +2,13 @@ import * as geojson from 'geojson';
 
 export interface Term<T extends Primitive> {
   type: 'term';
-  field?: string;
-  value?: TermValue<T>;
+  value: TermValue<T>;
+}
+
+export interface NamedTerm<T extends Primitive> {
+  type: 'namedterm';
+  field: string;
+  value: TermValue<T>;
 }
 
 export interface Range<T extends Primitive> {
@@ -15,36 +20,46 @@ export interface Range<T extends Primitive> {
   closedUpper: boolean;
 }
 
-export interface And<T extends Primitive> {
+export interface AndBase<U> {
   type: 'and';
-  lhs: Clause<T>;
-  rhs: Clause<T>;
+  operands: U[];
 }
+export interface And extends AndBase<Clause> {}
+export interface AndTerm<T extends Primitive> extends AndBase<TermValue<T>> {}
 
-export interface Or<T extends Primitive> {
+export interface OrBase<U> {
   type: 'or';
-  lhs: Clause<T>;
-  rhs: Clause<T>;
+  operands: U[];
 }
+export interface Or extends OrBase<Clause> {}
+export interface OrTerm<T extends Primitive> extends OrBase<TermValue<T>> {}
 
-export interface Not<T extends Primitive> {
+export interface NotBase<U> {
   type: 'not';
-  rhs: Clause<T>;
+  rhs: U;
 }
+export interface Not extends NotBase<Clause> {}
+export interface NotTerm<T extends Primitive> extends NotBase<TermValue<T>> {}
 
-export interface Required<T extends Primitive> {
+export interface RequiredBase<U> {
   type: 'required';
-  rhs: Clause<T>;
+  rhs: U;
 }
+export interface Required extends RequiredBase<Clause> {}
+export interface RequiredTerm<T extends Primitive>
+  extends RequiredBase<TermValue<T>> {}
 
-export interface Prohibited<T extends Primitive> {
+export interface ProhibitedBase<U> {
   type: 'prohibited';
-  rhs: Clause<T>;
+  rhs: U;
 }
+export interface Prohibited extends ProhibitedBase<Clause> {}
+export interface ProhibitedTerm<T extends Primitive>
+  extends ProhibitedBase<TermValue<T>> {}
 
-export interface ConstantScore<T extends Primitive> {
+export interface ConstantScore {
   type: 'constant';
-  lhs: Clause<T>;
+  lhs: Clause;
   rhs: number;
 }
 
@@ -54,29 +69,42 @@ export interface Spatial<T extends SpatialOp> {
   op: T;
   value: geojson.Geometry;
 }
+export interface Glob {
+  type: 'glob';
+  value: string;
+}
 export type Intersects = Spatial<'Intersects'>;
 export type IsWithin = Spatial<'IsWithin'>;
 export type Contains = Spatial<'Contains'>;
 export type IsDisjointTo = Spatial<'IsDisjointTo'>;
 
-export type Primitive = undefined | number | Date | string | Spatial<SpatialOp>;
+export type Primitive = number | Date | string | Spatial<SpatialOp> | Glob;
 
-export type Clause<T extends Primitive> =
-  | Term<T>
-  | TermValue<T>
-  | ConstantScore<T>;
+export interface Literal<T extends Primitive> {
+  type: 'literal';
+  value: T;
+}
 
-export type NonPrimitiveClause<T extends Primitive> =
-  | Term<T>
-  | NonPrimitiveTermValue<T>
-  | ConstantScore<T>;
+export type Clause =
+  | Term<Primitive>
+  | NamedTerm<Primitive>
+  | ConstantScore
+  | And
+  | Or
+  | Not
+  | Required
+  | Prohibited
+  | TermValue<Primitive>;
 
-export type TermValue<T extends Primitive> = T | NonPrimitiveTermValue<T>;
+export type TermValue<T extends Primitive> =
+  | Literal<T>
+  | Literal<Glob>
+  | NonPrimitiveTermValue<T>;
 
 export type NonPrimitiveTermValue<T extends Primitive> =
   | Range<T>
-  | And<T>
-  | Or<T>
-  | Not<T>
-  | Required<T>
-  | Prohibited<T>;
+  | AndTerm<T>
+  | OrTerm<T>
+  | NotTerm<T>
+  | RequiredTerm<T>
+  | ProhibitedTerm<T>;
