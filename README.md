@@ -1,14 +1,14 @@
-# solr-query-builder - 
+# solr-query-maker - 
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE) ![npm](https://img.shields.io/npm/v/solr-query-builder.svg) [![Build Status](https://travis-ci.com/holvonix-open/solr-query-builder.svg?branch=master)](https://travis-ci.com/holvonix-open/solr-query-builder) [![GitHub last commit](https://img.shields.io/github/last-commit/holvonix-open/solr-query-builder.svg)](https://github.com/holvonix-open/solr-query-builder/commits) [![codecov](https://codecov.io/gh/holvonix-open/solr-query-builder/branch/master/graph/badge.svg)](https://codecov.io/gh/holvonix-open/solr-query-builder) [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=holvonix-open/solr-query-builder)](https://dependabot.com) [![DeepScan grade](https://deepscan.io/api/teams/4465/projects/6351/branches/52780/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=4465&pid=6351&bid=52780) [![Code Style: Google](https://img.shields.io/badge/code%20style-google-blueviolet.svg)](https://github.com/google/gts)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE) ![npm](https://img.shields.io/npm/v/solr-query-maker.svg) [![DeepScan grade](https://deepscan.io/api/teams/4465/projects/6352/branches/52793/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=4465&pid=6352&bid=52793) [![GitHub last commit](https://img.shields.io/github/last-commit/holvonix-open/solr-query-maker.svg)](https://github.com/holvonix-open/solr-query-maker/commits) [![codecov](https://codecov.io/gh/holvonix-open/solr-query-maker/branch/master/graph/badge.svg)](https://codecov.io/gh/holvonix-open/solr-query-maker) [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=holvonix-open/solr-query-maker)](https://dependabot.com) [![DeepScan grade](https://deepscan.io/api/teams/4465/projects/6351/branches/52780/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=4465&pid=6351&bid=52780) [![Code Style: Google](https://img.shields.io/badge/code%20style-google-blueviolet.svg)](https://github.com/google/gts)
 
 
 ## Quick Start
 
-After `yarn add request solr-query-builder':
+After `yarn add request solr-query-maker':
 
 ````typescript
-import { TODO } from 'solr-query-builder';
+import { TODO } from 'solr-query-maker';
 
 async function getIt() {
   // TODO
@@ -24,10 +24,10 @@ Section 4d of the License.
 
 ````
 
-# solr-query-builder
+# solr-query-maker
 
 This product contains software originally developed by Holvonix LLC.
-Original Repository: https://github.com/holvonix-open/solr-query-builder
+Original Repository: https://github.com/holvonix-open/solr-query-maker
 
 Copyright (c) 2019 Holvonix LLC. All rights reserved.
 
