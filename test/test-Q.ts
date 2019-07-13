@@ -1,14 +1,5 @@
 import * as assert from 'assert';
-import { Q, Range } from '../src/index';
-import {
-  Term,
-  Not,
-  Required,
-  Prohibited,
-  ConstantScore,
-  And,
-  Or,
-} from '../src/index';
+import { Q } from '../src/index';
 
 describe('Q', () => {
   const lhs = Q.defaultTerm('LHS');
@@ -21,7 +12,7 @@ describe('Q', () => {
         assert.deepStrictEqual(Q.defaultTerm('hello'), {
           type: 'term',
           value: 'hello',
-        } as Term);
+        });
       });
     });
     describe('term', () => {
@@ -30,14 +21,14 @@ describe('Q', () => {
           type: 'term',
           field: 'name',
           value: 'hello',
-        } as Term);
+        });
       });
       it('works with wildcard', () => {
         assert.deepStrictEqual(Q.term('name'), {
           type: 'term',
           field: 'name',
           value: undefined,
-        } as Term);
+        });
       });
     });
 
@@ -49,7 +40,7 @@ describe('Q', () => {
           closedUpper: true,
           lower: 1,
           upper: 100,
-        } as Range);
+        });
       });
       it('works with wildcards', () => {
         assert.deepStrictEqual(Q.range(true, false, 1), {
@@ -58,7 +49,7 @@ describe('Q', () => {
           closedUpper: false,
           lower: 1,
           upper: undefined,
-        } as Range);
+        });
       });
     });
 
@@ -70,7 +61,7 @@ describe('Q', () => {
           closedUpper: true,
           lower: 1,
           upper: 100,
-        } as Range);
+        });
       });
       it('works with wildcards', () => {
         assert.deepStrictEqual(Q.closedRange(1), {
@@ -79,14 +70,14 @@ describe('Q', () => {
           closedUpper: true,
           lower: 1,
           upper: undefined,
-        } as Range);
+        });
         assert.deepStrictEqual(Q.closedRange(undefined, 1), {
           type: 'range',
           closedLower: true,
           closedUpper: true,
           upper: 1,
           lower: undefined,
-        } as Range);
+        });
       });
     });
 
@@ -98,7 +89,7 @@ describe('Q', () => {
           closedUpper: false,
           lower: 1,
           upper: 100,
-        } as Range);
+        });
       });
       it('works with wildcards', () => {
         assert.deepStrictEqual(Q.openRange(1), {
@@ -107,14 +98,14 @@ describe('Q', () => {
           closedUpper: false,
           lower: 1,
           upper: undefined,
-        } as Range);
+        });
         assert.deepStrictEqual(Q.openRange(undefined, 1), {
           type: 'range',
           closedLower: false,
           closedUpper: false,
           upper: 1,
           lower: undefined,
-        } as Range);
+        });
       });
     });
 
@@ -123,7 +114,7 @@ describe('Q', () => {
         assert.deepStrictEqual(Q.not(rhs), {
           type: 'not',
           rhs,
-        } as Not);
+        });
       });
     });
     describe('required', () => {
@@ -131,7 +122,7 @@ describe('Q', () => {
         assert.deepStrictEqual(Q.required(rhs), {
           type: 'required',
           rhs,
-        } as Required);
+        });
       });
     });
     describe('prohibited', () => {
@@ -139,7 +130,7 @@ describe('Q', () => {
         assert.deepStrictEqual(Q.prohibited(rhs), {
           type: 'prohibited',
           rhs,
-        } as Prohibited);
+        });
       });
     });
     describe('constantScore', () => {
@@ -148,7 +139,7 @@ describe('Q', () => {
           type: 'constant',
           lhs,
           rhs: 7.5,
-        } as ConstantScore);
+        });
       });
     });
     describe('and', () => {
@@ -157,7 +148,7 @@ describe('Q', () => {
           type: 'and',
           lhs,
           rhs,
-        } as And);
+        });
       });
       it('works with 4', () => {
         assert.deepStrictEqual(Q.and(lhs, rhs, rhs2, rhs3), {
@@ -168,11 +159,11 @@ describe('Q', () => {
               type: 'and',
               lhs,
               rhs,
-            } as And,
+            },
             rhs: rhs2,
-          } as And,
+          },
           rhs: rhs3,
-        } as And);
+        });
       });
     });
     describe('or', () => {
@@ -181,7 +172,7 @@ describe('Q', () => {
           type: 'or',
           lhs,
           rhs,
-        } as Or);
+        });
       });
       it('works with 4', () => {
         assert.deepStrictEqual(Q.or(lhs, rhs, rhs2, rhs3), {
@@ -192,11 +183,11 @@ describe('Q', () => {
               type: 'or',
               lhs,
               rhs,
-            } as Or,
+            },
             rhs: rhs2,
-          } as Or,
+          },
           rhs: rhs3,
-        } as Or);
+        });
       });
     });
   });
@@ -420,11 +411,11 @@ describe('Q', () => {
             rhs2,
             Q.term(
               'product',
-              Q.or(Q.closedRange(100, 94903), Q.not(Q.defaultTerm('junk')))
+              Q.or(Q.closedRange(100, undefined), Q.not(Q.defaultTerm(60)))
             )
           )
         ),
-        '((("LHS" OR "RHS") OR "RHS2") OR product:([100 TO 94903] OR (NOT "junk")))'
+        '((("LHS" OR "RHS") OR "RHS2") OR product:([100 TO *] OR (NOT 60)))'
       );
     });
   });
