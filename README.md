@@ -1,17 +1,31 @@
-# solr-query-maker - 
+# solr-query-maker - Build Solr search queries, including spatial predicates
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE) ![npm](https://img.shields.io/npm/v/solr-query-maker.svg) [![DeepScan grade](https://deepscan.io/api/teams/4465/projects/6352/branches/52793/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=4465&pid=6352&bid=52793) [![GitHub last commit](https://img.shields.io/github/last-commit/holvonix-open/solr-query-maker.svg)](https://github.com/holvonix-open/solr-query-maker/commits) [![codecov](https://codecov.io/gh/holvonix-open/solr-query-maker/branch/master/graph/badge.svg)](https://codecov.io/gh/holvonix-open/solr-query-maker) [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=holvonix-open/solr-query-maker)](https://dependabot.com) [![DeepScan grade](https://deepscan.io/api/teams/4465/projects/6353/branches/52803/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=4465&pid=6353&bid=52803) [![Code Style: Google](https://img.shields.io/badge/code%20style-google-blueviolet.svg)](https://github.com/google/gts)
 
 
 ## Quick Start
 
-After `yarn add request solr-query-maker':
+After `yarn add solr-query-maker':
 
 ````typescript
-import { TODO } from 'solr-query-maker';
+import { Q } from 'solr-query-maker';
 
-async function getIt() {
-  // TODO
+// Returns the value of the `q` URL parameter for searching.
+function makeQuery() {
+  // '((geo:"Intersects(POINT (-122.17381 37.426002))" OR "spicy") OR product:([100 TO *] AND (NOT 600)))'
+  return Q.toString(
+    Q.or(
+      Q.term(
+        'geo',
+        Q.spatial.intersects({
+          type: 'Point',
+          coordinates: [-122.17381, 37.426002],
+        })
+      ),
+      Q.defaultTerm('spicy'),
+      Q.term('product', Q.and(Q.closedRange(100, undefined), Q.not(600)))
+    )
+  );
 }
 ````
 

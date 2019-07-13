@@ -434,7 +434,25 @@ describe('Q', () => {
       });
     });
 
-    it('works on complex tree', () => {
+    it('works on complex tree 1', () => {
+      assert.deepStrictEqual(
+        Q.toString(
+          Q.or(
+            Q.term(
+              'geo',
+              Q.spatial.intersects({
+                type: 'Point',
+                coordinates: [-122.17381, 37.426002],
+              })
+            ),
+            Q.defaultTerm('spicy'),
+            Q.term('product', Q.and(Q.closedRange(100, undefined), Q.not(600)))
+          )
+        ),
+        '((geo:"Intersects(POINT (-122.17381 37.426002))" OR "spicy") OR product:([100 TO *] AND (NOT 600)))'
+      );
+    });
+    it('works on complex tree 2', () => {
       assert.deepStrictEqual(
         Q.toString(
           Q.or(
