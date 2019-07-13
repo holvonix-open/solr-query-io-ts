@@ -1,7 +1,16 @@
 export interface Term {
   type: 'term';
   field?: string;
-  value: TermValue;
+  value?: TermValue;
+}
+
+export interface Range {
+  type: 'range';
+  lower?: Primitive;
+  upper?: Primitive;
+
+  closedLower: boolean;
+  closedUpper: boolean;
 }
 
 export interface And {
@@ -37,15 +46,15 @@ export interface ConstantScore {
   rhs: number;
 }
 
-export type Clause =
-  | Term
+export type Clause = Term | TermValue | ConstantScore;
+
+export type Primitive = number | Date | string;
+
+export type TermValue =
+  | Primitive
+  | Range
   | And
   | Or
   | Not
   | Required
-  | Prohibited
-  | ConstantScore;
-
-export type Primitive = number | Date | string;
-
-export type TermValue = Primitive | And | Or | Not | Required | Prohibited;
+  | Prohibited;

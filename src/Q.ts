@@ -4,10 +4,12 @@ import {
   ConstantScore,
   Not,
   Or,
+  Primitive,
   Prohibited,
   Required,
   Term,
   TermValue,
+  Range,
 } from './types';
 
 import * as util from 'util';
@@ -20,13 +22,37 @@ export function defaultTerm(value: TermValue): Term {
   };
 }
 
-export function term(field: string, value: TermValue): Term {
+export function term(field: string, value?: TermValue): Term {
   return {
     type: 'term',
     field,
     value,
   };
 }
+
+export function range(
+  closedLower: boolean,
+  closedUpper: boolean,
+  lower?: Primitive,
+  upper?: Primitive
+): Range {
+  return {
+    type: 'range',
+    closedLower,
+    closedUpper,
+    lower,
+    upper,
+  };
+}
+
+export function openRange(lower?: Primitive, upper?: Primitive): Range {
+  return range(false, false, lower, upper);
+}
+
+export function closedRange(lower?: Primitive, upper?: Primitive): Range {
+  return range(true, true, lower, upper);
+}
+
 export function not(rhs: Clause): Not {
   return {
     type: 'not',
@@ -89,48 +115,53 @@ function nope(): never {
   throw new Error('unsupported');
 }
 
-export function toTermString(v: TermValue): string {
-  switch (typeof v) {
-    case 'string':
-      return escapeString(v);
-    case 'number':
-      return `${v}`;
-    default:
-      if (util.types.isDate(v)) {
-        return v.toISOString();
-      }
-      return toString(v);
-  }
+function toRangeString(v: Range): string {
+  return (
+    (v.closedLower ? '[' : '{') +
+    toString(v.lower) +
+    ' TO ' +
+    toString(v.upper) +
+    (v.closedUpper ? ']' : '}')
+  );
 }
 
 function escapeString(v: string) {
   return `"${v.replace(/"/g, '\\"')}"`;
 }
 
-function queryStringRaw(c: Clause) {
-  switch (c.type) {
-    case 'term':
-      return (
-        (c.field ? escapeString(c.field!) + ':' : '') + toTermString(c.value)
-      );
-    case 'and':
-      return `${toString(c.lhs)} AND ${toString(c.rhs)}`;
-    case 'constant':
-      return `${toString(c.lhs)}^=${c.rhs}`;
-    case 'not':
-      return `NOT ${toString(c.rhs)}`;
-    case 'or':
-      return `${toString(c.lhs)} OR ${toString(c.rhs)}`;
-    case 'prohibited':
-      return `-${toString(c.rhs)}`;
-    case 'required':
-      return `+${toString(c.rhs)}`;
+export function toString(c?: Clause): string {
+  switch (typeof c) {
+    case 'undefined':
+      return '*';
+    case 'string':
+      return escapeString(c);
+    case 'number':
+      return `${c}`;
     default:
-      /* istanbul ignore next */
-      return nope();
+      if (util.types.isDate(c)) {
+        return c.toISOString();
+      }
+      switch (c.type) {
+        case 'range':
+          return toRangeString(c);
+        case 'term':
+          return (c.field ? c.field! + ':' : '') + toString(c.value);
+        case 'and':
+          return `(${toString(c.lhs)} AND ${toString(c.rhs)})`;
+        case 'constant':
+          return `(${toString(c.lhs)})^=${c.rhs}`;
+        case 'not':
+          return `(NOT ${toString(c.rhs)})`;
+        case 'or':
+          return `(${toString(c.lhs)} OR ${toString(c.rhs)})`;
+        case 'prohibited':
+          return `-${toString(c.rhs)}`;
+        case 'required':
+          return `+${toString(c.rhs)}`;
+        /* istanbul ignore next */
+        default:
+          /* istanbul ignore next */
+          return nope();
+      }
   }
-}
-
-export function toString(c: Clause): string {
-  return `(${queryStringRaw(c)})`;
 }
