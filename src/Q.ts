@@ -15,14 +15,23 @@ import {
 import * as util from 'util';
 import reduce from 'lodash.reduce';
 
-export function defaultTerm(value: TermValue): Term {
+export function defaultTerm(value?: TermValue<string>): Term<string>;
+export function defaultTerm(value?: TermValue<Date>): Term<Date>;
+export function defaultTerm(value?: TermValue<number>): Term<number>;
+export function defaultTerm<T extends Primitive>(value: TermValue<T>): Term<T> {
   return {
     type: 'term',
     value,
   };
 }
 
-export function term(field: string, value?: TermValue): Term {
+export function term(field: string, value?: TermValue<string>): Term<string>;
+export function term(field: string, value?: TermValue<Date>): Term<Date>;
+export function term(field: string, value?: TermValue<number>): Term<number>;
+export function term<T extends Primitive>(
+  field: string,
+  value?: TermValue<T>
+): Term<T> {
   return {
     type: 'term',
     field,
@@ -30,12 +39,12 @@ export function term(field: string, value?: TermValue): Term {
   };
 }
 
-export function range(
+export function range<T extends Primitive>(
   closedLower: boolean,
   closedUpper: boolean,
-  lower?: Primitive,
-  upper?: Primitive
-): Range {
+  lower?: T,
+  upper?: T
+): Range<T> {
   return {
     type: 'range',
     closedLower,
@@ -45,33 +54,39 @@ export function range(
   };
 }
 
-export function openRange(lower?: Primitive, upper?: Primitive): Range {
+export function openRange<T extends Primitive>(lower?: T, upper?: T): Range<T> {
   return range(false, false, lower, upper);
 }
 
-export function closedRange(lower?: Primitive, upper?: Primitive): Range {
+export function closedRange<T extends Primitive>(
+  lower?: T,
+  upper?: T
+): Range<T> {
   return range(true, true, lower, upper);
 }
 
-export function not(rhs: Clause): Not {
+export function not<T extends Primitive>(rhs: Clause<T>): Not<T> {
   return {
     type: 'not',
     rhs,
   };
 }
-export function required(rhs: Clause): Required {
+export function required<T extends Primitive>(rhs: Clause<T>): Required<T> {
   return {
     type: 'required',
     rhs,
   };
 }
-export function prohibited(rhs: Clause): Prohibited {
+export function prohibited<T extends Primitive>(rhs: Clause<T>): Prohibited<T> {
   return {
     type: 'prohibited',
     rhs,
   };
 }
-export function constantScore(lhs: Clause, rhs: number): ConstantScore {
+export function constantScore<T extends Primitive>(
+  lhs: Clause<T>,
+  rhs: number
+): ConstantScore<T> {
   return {
     type: 'constant',
     lhs,
@@ -79,13 +94,13 @@ export function constantScore(lhs: Clause, rhs: number): ConstantScore {
   };
 }
 
-type BinaryOp = And | Or;
+type BinaryOp<U extends Primitive> = And<U> | Or<U>;
 
-function binary<T extends BinaryOp>(
+function binary<T extends BinaryOp<U>, U extends Primitive>(
   op: T['type'],
-  lhs: Clause,
-  rhs: Clause,
-  ...more: Clause[]
+  lhs: Clause<U>,
+  rhs: Clause<U>,
+  ...more: Array<Clause<U>>
 ) {
   return reduce(
     more,
@@ -103,11 +118,63 @@ function binary<T extends BinaryOp>(
     } as T
   );
 }
-export function and(lhs: Clause, rhs: Clause, ...more: Clause[]) {
-  return binary<And>('and', lhs, rhs, ...more);
+
+export function and(
+  lhs: Clause<string>,
+  rhs: Clause<string>,
+  ...mode: Array<Clause<string>>
+): And<string>;
+export function and(
+  lhs: Clause<number>,
+  rhs: Clause<number>,
+  ...mode: Array<Clause<number>>
+): And<number>;
+export function and(
+  lhs: Clause<Date>,
+  rhs: Clause<Date>,
+  ...mode: Array<Clause<Date>>
+): And<Date>;
+export function and(
+  lhs: Clause<Primitive>,
+  rhs: Clause<Primitive>,
+  ...mode: Array<Clause<Primitive>>
+): And<Primitive>;
+
+export function and<T extends Primitive>(
+  lhs: Clause<T>,
+  rhs: Clause<T>,
+  ...more: Array<Clause<T>>
+): And<T> {
+  return binary('and', lhs, rhs, ...more);
 }
-export function or(lhs: Clause, rhs: Clause, ...more: Clause[]) {
-  return binary<Or>('or', lhs, rhs, ...more);
+
+export function or(
+  lhs: Clause<string>,
+  rhs: Clause<string>,
+  ...mode: Array<Clause<string>>
+): Or<string>;
+export function or(
+  lhs: Clause<number>,
+  rhs: Clause<number>,
+  ...mode: Array<Clause<number>>
+): Or<number>;
+export function or(
+  lhs: Clause<Date>,
+  rhs: Clause<Date>,
+  ...mode: Array<Clause<Date>>
+): Or<Date>;
+export function or(
+  lhs: Clause<Primitive>,
+  rhs: Clause<Primitive>,
+  ...mode: Array<Clause<Primitive>>
+): Or<Primitive>;
+
+export function or<T extends Primitive>(
+  lhs: Clause<T>,
+  rhs: Clause<T>,
+  ...more: Array<Clause<T>>
+): Or<T> {
+  return binary('or', lhs, rhs, ...more);
 }
 
 /* istanbul ignore next */
@@ -115,7 +182,7 @@ function nope(): never {
   throw new Error('unsupported');
 }
 
-function toRangeString(v: Range): string {
+function toRangeString<T extends Primitive>(v: Range<T>): string {
   return (
     (v.closedLower ? '[' : '{') +
     toString(v.lower) +
@@ -129,7 +196,7 @@ function escapeString(v: string) {
   return `"${v.replace(/"/g, '\\"')}"`;
 }
 
-export function toString(c?: Clause): string {
+export function toString(c?: Clause<Primitive>): string {
   switch (typeof c) {
     case 'undefined':
       return '*';
@@ -141,27 +208,27 @@ export function toString(c?: Clause): string {
       if (util.types.isDate(c)) {
         return c.toISOString();
       }
-      switch (c.type) {
-        case 'range':
-          return toRangeString(c);
-        case 'term':
-          return (c.field ? c.field! + ':' : '') + toString(c.value);
-        case 'and':
-          return `(${toString(c.lhs)} AND ${toString(c.rhs)})`;
-        case 'constant':
-          return `(${toString(c.lhs)})^=${c.rhs}`;
-        case 'not':
-          return `(NOT ${toString(c.rhs)})`;
-        case 'or':
-          return `(${toString(c.lhs)} OR ${toString(c.rhs)})`;
-        case 'prohibited':
-          return `-${toString(c.rhs)}`;
-        case 'required':
-          return `+${toString(c.rhs)}`;
-        /* istanbul ignore next */
-        default:
-          /* istanbul ignore next */
-          return nope();
-      }
+  }
+  switch (c.type) {
+    case 'range':
+      return toRangeString(c);
+    case 'term':
+      return (c.field ? c.field! + ':' : '') + toString(c.value);
+    case 'and':
+      return `(${toString(c.lhs)} AND ${toString(c.rhs)})`;
+    case 'constant':
+      return `(${toString(c.lhs)})^=${c.rhs}`;
+    case 'not':
+      return `(NOT ${toString(c.rhs)})`;
+    case 'or':
+      return `(${toString(c.lhs)} OR ${toString(c.rhs)})`;
+    case 'prohibited':
+      return `-${toString(c.rhs)}`;
+    case 'required':
+      return `+${toString(c.rhs)}`;
+    /* istanbul ignore next */
+    default:
+      /* istanbul ignore next */
+      return nope();
   }
 }
