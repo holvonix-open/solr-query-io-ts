@@ -1,8 +1,8 @@
-/*
-# solr-query-builder
+/*!
+# solr-query-maker
 
 This product contains software originally developed by Holvonix LLC.
-Original Repository: https://github.com/holvonix-open/solr-query-builder
+Original Repository: https://github.com/holvonix-open/solr-query-maker
 
 Copyright (c) 2019 Holvonix LLC. All rights reserved.
 
@@ -21,4 +21,7 @@ limitations under the License.
 Third-party dependencies may have their own licenses.
 */
 
-export class SolrQueryBuilder {}
+import * as Q from './Q';
+
+export * from './types';
+export { Q };
