@@ -4,7 +4,7 @@
 
 ## Quick Start
 
-After `yarn add solr-query-maker':
+After `yarn add solr-query-maker`:
 
 ````typescript
 import { Q } from 'solr-query-maker';
