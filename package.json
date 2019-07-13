@@ -1,6 +1,6 @@
 {
   "name": "solr-query-maker",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A Solr Query builder and types",
   "repository": {
     "type": "git",
@@ -74,13 +74,13 @@
     "@types/mocha": "^5.2.5",
     "@types/nock": "^10.0.3",
     "@types/node": "^12.6.1",
-    "terraformer": "https://github.com/holvonix-open/terraformer#typesafety",
     "codecov": "^3.4.0",
     "gts": "^1.0.0",
     "mocha": "^6.1.4",
     "nock": "^10.0.6",
     "nyc": "^14.1.1",
     "source-map-support": "^0.5.12",
+    "terraformer": "https://github.com/holvonix-open/terraformer#typesafety",
     "ts-mocha": "^6.0.0",
     "typescript": "~3.5.0"
   }
