@@ -10,14 +10,24 @@ import {
   Term,
   TermValue,
   Range,
+  Spatial,
+  SpatialOp,
 } from './types';
 
 import * as util from 'util';
 import reduce from 'lodash.reduce';
 
+import * as spatial from './spatial';
+import * as wkt from 'terraformer-wkt-parser';
+
+export { spatial };
+
 export function defaultTerm(value?: TermValue<string>): Term<string>;
 export function defaultTerm(value?: TermValue<Date>): Term<Date>;
 export function defaultTerm(value?: TermValue<number>): Term<number>;
+export function defaultTerm(
+  value?: TermValue<Spatial<SpatialOp>>
+): Term<Spatial<SpatialOp>>;
 export function defaultTerm<T extends Primitive>(value: TermValue<T>): Term<T> {
   return {
     type: 'term',
@@ -28,6 +38,10 @@ export function defaultTerm<T extends Primitive>(value: TermValue<T>): Term<T> {
 export function term(field: string, value?: TermValue<string>): Term<string>;
 export function term(field: string, value?: TermValue<Date>): Term<Date>;
 export function term(field: string, value?: TermValue<number>): Term<number>;
+export function term(
+  field: string,
+  value?: TermValue<Spatial<SpatialOp>>
+): Term<Spatial<SpatialOp>>;
 export function term<T extends Primitive>(
   field: string,
   value?: TermValue<T>
@@ -39,7 +53,34 @@ export function term<T extends Primitive>(
   };
 }
 
+export function range(
+  closedLower: boolean,
+  closedUpper: boolean,
+  lower?: string,
+  upper?: string
+): Range<string>;
+export function range(
+  closedLower: boolean,
+  closedUpper: boolean,
+  lower?: Date,
+  upper?: Date
+): Range<Date>;
+export function range(
+  closedLower: boolean,
+  closedUpper: boolean,
+  lower?: number,
+  upper?: number
+): Range<number>;
 export function range<T extends Primitive>(
+  closedLower: boolean,
+  closedUpper: boolean,
+  lower?: T,
+  upper?: T
+): Range<T> {
+  return rangeImpl(closedLower, closedUpper, lower, upper);
+}
+
+function rangeImpl<T extends Primitive>(
   closedLower: boolean,
   closedUpper: boolean,
   lower?: T,
@@ -54,15 +95,21 @@ export function range<T extends Primitive>(
   };
 }
 
+export function openRange(lower?: string, upper?: string): Range<string>;
+export function openRange(lower?: number, upper?: number): Range<number>;
+export function openRange(lower?: Date, upper?: Date): Range<Date>;
 export function openRange<T extends Primitive>(lower?: T, upper?: T): Range<T> {
-  return range(false, false, lower, upper);
+  return rangeImpl(false, false, lower, upper);
 }
 
+export function closedRange(lower?: string, upper?: string): Range<string>;
+export function closedRange(lower?: number, upper?: number): Range<number>;
+export function closedRange(lower?: Date, upper?: Date): Range<Date>;
 export function closedRange<T extends Primitive>(
   lower?: T,
   upper?: T
 ): Range<T> {
-  return range(true, true, lower, upper);
+  return rangeImpl(true, true, lower, upper);
 }
 
 export function not<T extends Primitive>(rhs: Clause<T>): Not<T> {
@@ -139,6 +186,11 @@ export function and(
   rhs: Clause<Primitive>,
   ...mode: Array<Clause<Primitive>>
 ): And<Primitive>;
+export function and(
+  lhs: Clause<Spatial<SpatialOp>>,
+  rhs: Clause<Spatial<SpatialOp>>,
+  ...mode: Array<Clause<Spatial<SpatialOp>>>
+): And<Spatial<SpatialOp>>;
 
 export function and<T extends Primitive>(
   lhs: Clause<T>,
@@ -163,6 +215,11 @@ export function or(
   rhs: Clause<Date>,
   ...mode: Array<Clause<Date>>
 ): Or<Date>;
+export function or(
+  lhs: Clause<Spatial<SpatialOp>>,
+  rhs: Clause<Spatial<SpatialOp>>,
+  ...mode: Array<Clause<Spatial<SpatialOp>>>
+): Or<Spatial<SpatialOp>>;
 export function or(
   lhs: Clause<Primitive>,
   rhs: Clause<Primitive>,
@@ -210,6 +267,8 @@ export function toString(c?: Clause<Primitive>): string {
       }
   }
   switch (c.type) {
+    case 'spatial':
+      return toString(`${c.op}(${wkt.convert(c.value)})`);
     case 'range':
       return toRangeString(c);
     case 'term':
