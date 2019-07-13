@@ -65,12 +65,10 @@
     "preversion": "yarn test"
   },
   "dependencies": {
-    "lodash.reduce": "^4.6.0",
     "terraformer-wkt-parser": "^1.2.0"
   },
   "devDependencies": {
     "@types/geojson": "^7946.0.7",
-    "@types/lodash.reduce": "^4.6.6",
     "@types/mocha": "^5.2.5",
     "@types/nock": "^10.0.3",
     "@types/node": "^12.6.1",

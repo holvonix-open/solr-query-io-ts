@@ -8,9 +8,12 @@ describe('spatial', () => {
     describe('intersects', () => {
       it('works', () => {
         assert.deepStrictEqual(Q.spatial.intersects(geo), {
-          type: 'spatial',
-          op: 'Intersects',
-          value: geo,
+          type: 'literal',
+          value: {
+            type: 'spatial',
+            op: 'Intersects',
+            value: geo,
+          },
         });
       });
     });
@@ -18,9 +21,12 @@ describe('spatial', () => {
     describe('contains', () => {
       it('works', () => {
         assert.deepStrictEqual(Q.spatial.contains(geo), {
-          type: 'spatial',
-          op: 'Contains',
-          value: geo,
+          type: 'literal',
+          value: {
+            type: 'spatial',
+            op: 'Contains',
+            value: geo,
+          },
         });
       });
     });
@@ -28,9 +34,12 @@ describe('spatial', () => {
     describe('isDisjointTo', () => {
       it('works', () => {
         assert.deepStrictEqual(Q.spatial.isDisjointTo(geo), {
-          type: 'spatial',
-          op: 'IsDisjointTo',
-          value: geo,
+          type: 'literal',
+          value: {
+            type: 'spatial',
+            op: 'IsDisjointTo',
+            value: geo,
+          },
         });
       });
     });
@@ -38,9 +47,12 @@ describe('spatial', () => {
     describe('isWithin', () => {
       it('works', () => {
         assert.deepStrictEqual(Q.spatial.isWithin(geo), {
-          type: 'spatial',
-          op: 'IsWithin',
-          value: geo,
+          type: 'literal',
+          value: {
+            type: 'spatial',
+            op: 'IsWithin',
+            value: geo,
+          },
         });
       });
     });
