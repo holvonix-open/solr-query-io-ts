@@ -1,6 +1,6 @@
 {
   "name": "solr-query-maker",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "description": "A Solr Query builder and types",
   "repository": {
     "type": "git",
@@ -62,7 +62,7 @@
     "prepare": "yarn clean && yarn check && yarn run compile",
     "pretest": "yarn run compile",
     "posttest": "yarn run check",
-    "preversion": "yarn test",  
+    "preversion": "yarn test",
     "semantic-release": "semantic-release"
   },
   "release": {
