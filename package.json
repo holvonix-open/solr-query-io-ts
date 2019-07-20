@@ -62,12 +62,28 @@
     "prepare": "yarn clean && yarn check && yarn run compile",
     "pretest": "yarn run compile",
     "posttest": "yarn run check",
-    "preversion": "yarn test"
+    "preversion": "yarn test",  
+    "semantic-release": "semantic-release"
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/git",
+      "@semantic-release/github"
+    ]
   },
   "dependencies": {
     "terraformer-wkt-parser": "^1.2.0"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^3.0.4",
+    "@semantic-release/commit-analyzer": "^6.2.0",
+    "@semantic-release/git": "^7.0.16",
+    "@semantic-release/github": "^5.4.2",
+    "@semantic-release/release-notes-generator": "^7.2.1",
     "@types/geojson": "^7946.0.7",
     "@types/mocha": "^5.2.5",
     "@types/nock": "^10.0.3",
@@ -77,6 +93,7 @@
     "mocha": "^6.1.4",
     "nock": "^10.0.6",
     "nyc": "^14.1.1",
+    "semantic-release": "^15.13.18",
     "source-map-support": "^0.5.12",
     "terraformer": "https://github.com/holvonix-open/terraformer#typesafety",
     "ts-mocha": "^6.0.0",
