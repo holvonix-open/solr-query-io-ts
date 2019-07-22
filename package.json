@@ -46,11 +46,11 @@
   "scripts": {
     "t": "yarn fix && yarn test --grep='#slow' --invert && yarn coverage",
     "cleantests": "rm -rf *.lcov .nyc_output coverage",
-    "clean": "gts clean",
+    "clean": "gts clean && yarn cleantests",
     "start": "node index.js",
     "debug": "node --inspect index.js",
     "cleanstart": "yarn clean; yarn start",
-    "test": "nyc ts-mocha -p ./tsconfig.json 'test/**/*.ts'",
+    "test": "nyc --reporter=json --reporter=lcov --reporter=text ts-mocha -p ./tsconfig.json 'test/**/*.ts'",
     "test-coverage": "yarn clean && yarn test && yarn report-coverage",
     "coverage": "nyc report --reporter=lcov --reporter=json",
     "report-coverage": "yarn coverage && codecov -F unit -f coverage/*.json",
