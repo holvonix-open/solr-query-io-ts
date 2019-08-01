@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/holvonix-open/solr-query-maker/compare/v1.0.1...v1.0.2) (2019-08-01)
+
+
+### Bug Fixes
+
+* return to node 10 ([b6af885](https://github.com/holvonix-open/solr-query-maker/commit/b6af885))
+
 ## [1.0.1](https://github.com/holvonix-open/solr-query-maker/compare/v1.0.0...v1.0.1) (2019-08-01)
 
 
