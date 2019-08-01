@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/holvonix-open/solr-query-maker/compare/v1.0.2...v1.0.3) (2019-08-01)
+
+
+### Bug Fixes
+
+* **build:** fix broken build scripts ([3aa5fed](https://github.com/holvonix-open/solr-query-maker/commit/3aa5fed))
+
 ## [1.0.2](https://github.com/holvonix-open/solr-query-maker/compare/v1.0.1...v1.0.2) (2019-08-01)
 
 
