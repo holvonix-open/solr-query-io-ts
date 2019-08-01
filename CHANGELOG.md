@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/holvonix-open/solr-query-maker/compare/v1.0.0...v1.0.1) (2019-08-01)
+
+
+### Bug Fixes
+
+* permit node8,yarn1 ([28bf719](https://github.com/holvonix-open/solr-query-maker/commit/28bf719))
+
 # [1.0.0](https://github.com/holvonix-open/solr-query-maker/compare/v0.10.0...v1.0.0) (2019-07-22)
 
 
