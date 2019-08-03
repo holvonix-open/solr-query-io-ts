@@ -90,6 +90,16 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
+"@holvonix-open/release-config-js@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@holvonix-open/release-config-js/-/release-config-js-1.0.3.tgz#2164fbe4a26ca9ad18a90e3da89d05b5c3aa6906"
+  integrity sha512-hGZvzztOeHY+7Tw5Wb0KiwN3IS7MCzY3GCLO4KoR7Y7BMLFUxbuTJ172jN8XVvG0F9pAIp980CXaaJJrzvXsFQ==
+  dependencies:
+    "@semantic-release/changelog" "^3.0.4"
+    "@semantic-release/git" "^7.0.16"
+    conventional-changelog-angular "^5.0.3"
+    semantic-release "^15.13.19"
+
 "@nodelib/fs.scandir@2.1.1":
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.1.tgz#7fa8fed654939e1a39753d286b48b4836d00e0eb"
@@ -171,7 +181,7 @@
     fs-extra "^8.0.0"
     lodash "^4.17.4"
 
-"@semantic-release/commit-analyzer@^6.1.0", "@semantic-release/commit-analyzer@^6.2.0":
+"@semantic-release/commit-analyzer@^6.1.0":
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/@semantic-release/commit-analyzer/-/commit-analyzer-6.2.0.tgz#5cd25ce67ba9ba5b46e47457505e63629e186695"
   integrity sha512-oUtPydYcbtJsEY6WCPi4wynTgRecK5zCkKaGmHi+9Xl7d6jGf7LomnJCg++6dNF1tyavrbGMSdXTCPH6Dx9LbA==
@@ -204,7 +214,7 @@
     micromatch "^4.0.0"
     p-reduce "^2.0.0"
 
-"@semantic-release/github@^5.1.0", "@semantic-release/github@^5.4.2":
+"@semantic-release/github@^5.1.0":
   version "5.4.2"
   resolved "https://registry.yarnpkg.com/@semantic-release/github/-/github-5.4.2.tgz#1dbde876228c03ff9a000893a18aff5c6ab2cd61"
   integrity sha512-8gkOa5tED/+sjAPwZRYsLaGr6VuAGLZinSvLsuF9/l4qLeYV8gvj7fhjFJepGu6y31t7PR2J9SWzmsqsBAyyKQ==
@@ -244,7 +254,7 @@
     read-pkg "^5.0.0"
     registry-auth-token "^4.0.0"
 
-"@semantic-release/release-notes-generator@^7.1.2", "@semantic-release/release-notes-generator@^7.2.1":
+"@semantic-release/release-notes-generator@^7.1.2":
   version "7.2.1"
   resolved "https://registry.yarnpkg.com/@semantic-release/release-notes-generator/-/release-notes-generator-7.2.1.tgz#2c0c340e7be2a3d27c28cb869b6737a70f2862fe"
   integrity sha512-TdlYgYH6amhE80i9L9HPcTwYzk4Rma7qM1g7XJEEfip7dNXWgmrBeibN4DJmTg/qrUFDd4GD86lFDcYXNZDNow==
@@ -1061,7 +1071,7 @@ console-control-strings@^1.0.0, console-control-strings@^1.1.0, console-control-
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
   integrity sha1-PXz0Rk22RG6mRL9LOVB/mFEAjo4=
 
-conventional-changelog-angular@^5.0.0:
+conventional-changelog-angular@^5.0.0, conventional-changelog-angular@^5.0.3:
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/conventional-changelog-angular/-/conventional-changelog-angular-5.0.3.tgz#299fdd43df5a1f095283ac16aeedfb0a682ecab0"
   integrity sha512-YD1xzH7r9yXQte/HF9JBuEDfvjxxwDGGwZU1+ndanbY0oFgA+Po1T9JDSpPLdP0pZT6MhCAsdvFKC4TJ4MTJTA==
