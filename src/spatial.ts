@@ -1,40 +1,43 @@
 import {
   Spatial,
-  SpatialOp,
   Intersects,
   IsWithin,
   Contains,
   IsDisjointTo,
   Literal,
 } from './types';
-import * as geojson from 'geojson';
+import * as geojson from '@holvonix-misc/geojson-iots';
 
-export function spatialPredicate<T extends SpatialOp>(
+function spatialPredicate<T extends Spatial['value']['op']>(
   op: T,
-  value: geojson.Geometry
-): Literal<Spatial<T>> {
+  value: geojson.GeometryObject
+) {
   return {
-    type: 'literal',
+    type: 'literal' as const,
     value: {
-      type: 'spatial',
-      op,
-      value,
+      type: 'spatial' as const,
+      value: {
+        op,
+        geom: value,
+      },
     },
   };
 }
 
-export function intersects(value: geojson.Geometry): Literal<Intersects> {
+export function intersects(value: geojson.GeometryObject): Literal<Intersects> {
   return spatialPredicate('Intersects', value);
 }
 
-export function isWithin(value: geojson.Geometry): Literal<IsWithin> {
+export function isWithin(value: geojson.GeometryObject): Literal<IsWithin> {
   return spatialPredicate('IsWithin', value);
 }
 
-export function contains(value: geojson.Geometry): Literal<Contains> {
+export function contains(value: geojson.GeometryObject): Literal<Contains> {
   return spatialPredicate('Contains', value);
 }
 
-export function isDisjointTo(value: geojson.Geometry): Literal<IsDisjointTo> {
+export function isDisjointTo(
+  value: geojson.GeometryObject
+): Literal<IsDisjointTo> {
   return spatialPredicate('IsDisjointTo', value);
 }

@@ -16,7 +16,6 @@ import {
   TermValue,
   Range,
   Spatial,
-  SpatialOp,
   NotBase,
   RequiredBase,
   Required,
@@ -25,34 +24,59 @@ import {
   AndBase,
   OrBase,
   Glob,
+  LString,
+  LDate,
+  LNumber,
+  RangedPrimitive,
+  QueryElement,
 } from './types';
 
 import * as util from 'util';
 
 import * as spatial from './spatial';
-import * as wkt from 'terraformer-wkt-parser';
+import * as wkx from 'wkx';
 
 export { spatial };
 
-export function L<T extends Primitive>(value: T): Literal<T> {
+function LT<T extends Primitive>(value: T['value']): T['type'] {
+  if (util.types.isDate(value)) {
+    return 'date';
+  }
+  switch (typeof value) {
+    case 'number':
+      return 'number';
+    case 'string':
+      return 'string';
+    default:
+      throw new RangeError('SQM001: value is not a Date, number, or string');
+  }
+}
+
+export function L(value: string): Literal<LString>;
+export function L(value: number): Literal<LNumber>;
+export function L(value: Date): Literal<LDate>;
+export function L<T extends Primitive>(value: T['value']): Literal<T> {
+  return LL<T>({ type: LT(value), value } as T);
+}
+
+export function LL<T extends Primitive>(value: T): Literal<T> {
   return {
     type: 'literal',
-    value,
+    value: value as T & Primitive,
   };
 }
+
 export function glob(value: string): Literal<Glob> {
-  return L({
+  return LL({
     type: 'glob',
     value,
   });
 }
 
-export function defaultTerm(value: TermValue<string>): Term<string>;
-export function defaultTerm(value: TermValue<Date>): Term<Date>;
-export function defaultTerm(value: TermValue<number>): Term<number>;
-export function defaultTerm(
-  value: TermValue<Spatial<SpatialOp>>
-): Term<Spatial<SpatialOp>>;
+export function defaultTerm(value: TermValue<LString>): Term<LString>;
+export function defaultTerm(value: TermValue<LNumber>): Term<LNumber>;
+export function defaultTerm(value: TermValue<LDate>): Term<LDate>;
+export function defaultTerm(value: TermValue<Spatial>): Term<Spatial>;
 export function defaultTerm<T extends Primitive>(value: TermValue<T>): Term<T> {
   return {
     type: 'term',
@@ -62,17 +86,17 @@ export function defaultTerm<T extends Primitive>(value: TermValue<T>): Term<T> {
 
 export function term(
   field: string,
-  value: TermValue<string>
-): NamedTerm<string>;
-export function term(field: string, value: TermValue<Date>): NamedTerm<Date>;
+  value: TermValue<LString>
+): NamedTerm<LString>;
 export function term(
   field: string,
-  value: TermValue<number>
-): NamedTerm<number>;
+  value: TermValue<LNumber>
+): NamedTerm<LNumber>;
+export function term(field: string, value: TermValue<LDate>): NamedTerm<LDate>;
 export function term(
   field: string,
-  value: TermValue<Spatial<SpatialOp>>
-): NamedTerm<Spatial<SpatialOp>>;
+  value: TermValue<Spatial>
+): NamedTerm<Spatial>;
 export function term<T extends Primitive>(
   field: string,
   value: TermValue<T>
@@ -89,36 +113,47 @@ export function range(
   closedUpper: boolean,
   lower?: string,
   upper?: string
-): Range<string>;
-export function range(
-  closedLower: boolean,
-  closedUpper: boolean,
-  lower?: Date,
-  upper?: Date
-): Range<Date>;
+): Range<LString>;
 export function range(
   closedLower: boolean,
   closedUpper: boolean,
   lower?: number,
   upper?: number
-): Range<number>;
-export function range<T extends Primitive>(
+): Range<LNumber>;
+export function range(
   closedLower: boolean,
   closedUpper: boolean,
-  lower?: T,
-  upper?: T
+  lower?: Date,
+  upper?: Date
+): Range<LDate>;
+export function range<T extends RangedPrimitive>(
+  closedLower: boolean,
+  closedUpper: boolean,
+  lower?: T['value'],
+  upper?: T['value']
 ): Range<T> {
   return rangeImpl(closedLower, closedUpper, lower, upper);
 }
 
-function rangeImpl<T extends Primitive>(
+function rangeImpl<T extends RangedPrimitive>(
   closedLower: boolean,
   closedUpper: boolean,
-  lower?: T,
-  upper?: T
+  lower?: T['value'],
+  upper?: T['value']
 ): Range<T> {
+  if (lower == null && upper == null) {
+    throw new Error('SQM002: unbounded range');
+  }
+  const typeSource = (lower == null ? upper : lower)!;
+  const lt = LT(typeSource);
+  if (lower != null && upper != null) {
+    if (LT(upper) !== lt) {
+      throw new Error('SQM003: range bound types must match');
+    }
+  }
   return {
     type: 'range',
+    valueType: LT(typeSource),
     closedLower,
     closedUpper,
     lower,
@@ -126,24 +161,30 @@ function rangeImpl<T extends Primitive>(
   };
 }
 
-export function openRange(lower?: string, upper?: string): Range<string>;
-export function openRange(lower?: number, upper?: number): Range<number>;
-export function openRange(lower?: Date, upper?: Date): Range<Date>;
-export function openRange<T extends Primitive>(lower?: T, upper?: T): Range<T> {
+export function openRange(lower?: string, upper?: string): Range<LString>;
+export function openRange(lower?: number, upper?: number): Range<LNumber>;
+export function openRange(lower?: Date, upper?: Date): Range<LDate>;
+export function openRange<T extends RangedPrimitive>(
+  lower?: T['value'],
+  upper?: T['value']
+): Range<T> {
   return rangeImpl(false, false, lower, upper);
 }
 
-export function closedRange(lower?: string, upper?: string): Range<string>;
-export function closedRange(lower?: number, upper?: number): Range<number>;
-export function closedRange(lower?: Date, upper?: Date): Range<Date>;
-export function closedRange<T extends Primitive>(
-  lower?: T,
-  upper?: T
+export function closedRange(lower?: string, upper?: string): Range<LString>;
+export function closedRange(lower?: number, upper?: number): Range<LNumber>;
+export function closedRange(lower?: Date, upper?: Date): Range<LDate>;
+export function closedRange<T extends RangedPrimitive>(
+  lower?: T['value'],
+  upper?: T['value']
 ): Range<T> {
   return rangeImpl(true, true, lower, upper);
 }
 
-export function not<T extends Primitive>(rhs: TermValue<T>): NotTerm<T>;
+export function not(rhs: TermValue<LString>): NotTerm<LString>;
+export function not(rhs: TermValue<LNumber>): NotTerm<LNumber>;
+export function not(rhs: TermValue<LDate>): NotTerm<LDate>;
+export function not(rhs: TermValue<Spatial>): NotTerm<Spatial>;
 export function not(rhs: Clause): Not;
 export function not<U>(rhs: U): NotBase<U> {
   return {
@@ -152,9 +193,10 @@ export function not<U>(rhs: U): NotBase<U> {
   };
 }
 
-export function required<T extends Primitive>(
-  rhs: TermValue<T>
-): RequiredTerm<T>;
+export function required(rhs: TermValue<LString>): RequiredTerm<LString>;
+export function required(rhs: TermValue<LNumber>): RequiredTerm<LNumber>;
+export function required(rhs: TermValue<LDate>): RequiredTerm<LDate>;
+export function required(rhs: TermValue<Spatial>): RequiredTerm<Spatial>;
 export function required(rhs: Clause): Required;
 export function required<U>(rhs: U): RequiredBase<U> {
   return {
@@ -163,9 +205,10 @@ export function required<U>(rhs: U): RequiredBase<U> {
   };
 }
 
-export function prohibited<T extends Primitive>(
-  rhs: TermValue<T>
-): ProhibitedTerm<T>;
+export function prohibited(rhs: TermValue<LString>): ProhibitedTerm<LString>;
+export function prohibited(rhs: TermValue<LNumber>): ProhibitedTerm<LNumber>;
+export function prohibited(rhs: TermValue<LDate>): ProhibitedTerm<LDate>;
+export function prohibited(rhs: TermValue<Spatial>): ProhibitedTerm<Spatial>;
 export function prohibited(rhs: Clause): Prohibited;
 export function prohibited<U>(rhs: U): ProhibitedBase<U> {
   return {
@@ -182,13 +225,10 @@ export function constantScore(lhs: Clause, rhs: number): ConstantScore {
   };
 }
 
-export function and(...more: Array<TermValue<string>>): AndTerm<string>;
-export function and(...more: Array<TermValue<number>>): AndTerm<number>;
-export function and(...more: Array<TermValue<Date>>): AndTerm<Date>;
-export function and(...more: Array<TermValue<Primitive>>): AndTerm<Primitive>;
-export function and(
-  ...more: Array<TermValue<Spatial<SpatialOp>>>
-): AndTerm<Spatial<SpatialOp>>;
+export function and(...more: Array<TermValue<LString>>): AndTerm<LString>;
+export function and(...more: Array<TermValue<LNumber>>): AndTerm<LNumber>;
+export function and(...more: Array<TermValue<LDate>>): AndTerm<LDate>;
+export function and(...more: Array<TermValue<Spatial>>): AndTerm<Spatial>;
 export function and<T>(...more: Clause[]): And;
 export function and<U>(...more: U[]): AndBase<U> {
   return {
@@ -197,13 +237,10 @@ export function and<U>(...more: U[]): AndBase<U> {
   };
 }
 
-export function or(...more: Array<TermValue<string>>): OrTerm<string>;
-export function or(...more: Array<TermValue<number>>): OrTerm<number>;
-export function or(...more: Array<TermValue<Date>>): OrTerm<Date>;
-export function or(...more: Array<TermValue<Primitive>>): OrTerm<Primitive>;
-export function or(
-  ...more: Array<TermValue<Spatial<SpatialOp>>>
-): OrTerm<Spatial<SpatialOp>>;
+export function or(...more: Array<TermValue<LString>>): OrTerm<LString>;
+export function or(...more: Array<TermValue<LNumber>>): OrTerm<LNumber>;
+export function or(...more: Array<TermValue<LDate>>): OrTerm<LDate>;
+export function or(...more: Array<TermValue<Spatial>>): OrTerm<Spatial>;
 export function or(...more: Clause[]): Or;
 export function or<U>(...more: U[]): OrBase<U> {
   return {
@@ -217,24 +254,30 @@ function nope(): never {
   throw new Error('unsupported');
 }
 
-function toLiteralString(c?: Primitive): string {
-  switch (typeof c) {
-    case 'undefined':
-      return '*';
-    case 'string':
-      return quoteString(c);
-    case 'number':
-      return `${c}`;
-    default:
-      if (util.types.isDate(c)) {
-        return c.toISOString();
-      }
+function wkt(g: Spatial['value']['geom']): string {
+  return wkx.Geometry.parseGeoJSON(g).toWkt();
+}
+
+function toLiteralString<T extends Primitive>(
+  ct: T['type'],
+  c?: T['value']
+): string {
+  if (c == null) {
+    return '*';
   }
-  switch (c.type) {
+  switch (ct) {
+    case 'string':
+      return quoteString(c as string);
+    case 'number':
+      return `${c as number}`;
+    case 'date':
+      return (c as Date).toISOString();
     case 'spatial':
-      return quoteString(`${c.op}(${wkt.convert(c.value)})`);
+      return quoteString(
+        `${(c as Spatial['value']).op}(${wkt((c as Spatial['value']).geom)})`
+      );
     case 'glob':
-      return escapedGlob(c.value);
+      return escapedGlob(c as string);
     /* istanbul ignore next */
     default:
       /* istanbul ignore next */
@@ -242,12 +285,12 @@ function toLiteralString(c?: Primitive): string {
   }
 }
 
-function toRangeString<T extends Primitive>(v: Range<T>): string {
+function toRangeString(v: Range<RangedPrimitive>): string {
   return (
     (v.closedLower ? '[' : '{') +
-    toLiteralString(v.lower) +
+    toLiteralString(v.valueType, v.lower) +
     ' TO ' +
-    toLiteralString(v.upper) +
+    toLiteralString(v.valueType, v.upper) +
     (v.closedUpper ? ']' : '}')
   );
 }
@@ -261,7 +304,7 @@ function quoteString(v: string) {
   return `"${v.replace(/["\\]/g, '\\$&')}"`;
 }
 
-function binaryOp(op: string, operands: Clause[]) {
+function binaryOp(op: string, operands: QueryElement[]) {
   const elems: string[] = [];
   for (const v of operands) {
     elems.push(toStringImpl(v));
@@ -269,7 +312,7 @@ function binaryOp(op: string, operands: Clause[]) {
   return `(${elems.join(` ${op} `)})`;
 }
 
-function toStringImpl(c: Clause): string {
+function toStringImpl(c: QueryElement): string {
   switch (c.type) {
     case 'range':
       return toRangeString(c);
@@ -290,14 +333,15 @@ function toStringImpl(c: Clause): string {
     case 'required':
       return `+${toStringImpl(c.rhs)}`;
     case 'literal':
-      return toLiteralString(c.value);
+      return toLiteralString(c.value.type, c.value.value);
     /* istanbul ignore next */
     default:
+      console.error(util.inspect(c, false, 1000, true));
       /* istanbul ignore next */
       return nope();
   }
 }
 
-export function toString(c: Clause): string {
+export function toString(c: QueryElement): string {
   return toStringImpl(c);
 }
