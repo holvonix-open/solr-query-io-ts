@@ -1,12 +1,20 @@
 # solr-query-maker - Build Solr search queries, including spatial predicates
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE) [![npm](https://img.shields.io/npm/v/solr-query-maker.svg)](https://www.npmjs.com/package/solr-query-maker) [![Build Status](https://travis-ci.com/holvonix-open/solr-query-maker.svg?branch=master)](https://travis-ci.com/holvonix-open/solr-query-maker) [![GitHub last commit](https://img.shields.io/github/last-commit/holvonix-open/solr-query-maker.svg)](https://github.com/holvonix-open/solr-query-maker/commits) [![codecov](https://codecov.io/gh/holvonix-open/solr-query-maker/branch/master/graph/badge.svg)](https://codecov.io/gh/holvonix-open/solr-query-maker) [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=holvonix-open/solr-query-maker)](https://dependabot.com) [![DeepScan grade](https://deepscan.io/api/teams/4465/projects/6353/branches/52803/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=4465&pid=6353&bid=52803) [![Code Style: Google](https://img.shields.io/badge/code%20style-google-blueviolet.svg)](https://github.com/google/gts) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE)
+[![npm](https://img.shields.io/npm/v/solr-query-maker.svg)](https://www.npmjs.com/package/solr-query-maker)
+[![Build Status](https://travis-ci.com/holvonix-open/solr-query-maker.svg?branch=master)](https://travis-ci.com/holvonix-open/solr-query-maker)
+[![GitHub last commit](https://img.shields.io/github/last-commit/holvonix-open/solr-query-maker.svg)](https://github.com/holvonix-open/solr-query-maker/commits)
+[![codecov](https://codecov.io/gh/holvonix-open/solr-query-maker/branch/master/graph/badge.svg)](https://codecov.io/gh/holvonix-open/solr-query-maker)
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=holvonix-open/solr-query-maker)](https://dependabot.com)
+[![DeepScan grade](https://deepscan.io/api/teams/4465/projects/6353/branches/52803/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=4465&pid=6353&bid=52803)
+[![Code Style: Google](https://img.shields.io/badge/code%20style-google-blueviolet.svg)](https://github.com/google/gts)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 ## Quick Start
 
 After `yarn add solr-query-maker`:
 
-````typescript
+```typescript
 import { Q } from 'solr-query-maker';
 
 // Returns the value of the `q` URL parameter for searching.
@@ -27,16 +35,15 @@ function makeQuery() {
     )
   );
 }
-````
-
+```
 
 ## License
 
 Read the [LICENSE](LICENSE) for details.  
-The entire [NOTICE](NOTICE) file serves as the NOTICE that must be included under
-Section 4d of the License.
+The entire [NOTICE](NOTICE) file serves as the NOTICE that must be included
+under Section 4d of the License.
 
-````
+```
 
 # solr-query-maker
 
@@ -59,4 +66,4 @@ limitations under the License.
 
 Third-party dependencies may have their own licenses.
 
-````
+```
