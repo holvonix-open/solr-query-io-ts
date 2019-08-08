@@ -1,14 +1,73 @@
 import * as assert from 'assert';
-import * as Terraformer from 'terraformer';
-import { Q } from '../src/index';
+import * as Q from '../src/Q';
+import * as tt from '../src/types';
+import { PathReporter } from 'io-ts/lib/PathReporter';
+import {
+  createCoreRegistry,
+  loadIoTsTypesFuzzers,
+  ExampleGenerator,
+  fuzzContext,
+} from 'io-ts-fuzzer';
+import { PolygonIO, Polygon } from '@holvonix-misc/geojson-iots';
+import { Either, isRight } from 'fp-ts/lib/Either';
+import { Errors } from 'io-ts';
 
 describe('Q', () => {
+  const d = <B>(v: Either<Errors, B>) => {
+    if (isRight(v)) {
+      return v.right;
+    }
+    assert.fail(PathReporter.report(v).join(';'));
+    throw new Error();
+  };
   const lhs = Q.defaultTerm(Q.L('LHS'));
   const rhs = Q.defaultTerm(Q.L('RHS'));
   const rhs2 = Q.defaultTerm(Q.L('RHS2'));
   const rhs3 = Q.defaultTerm(Q.L('RHS3'));
   const rhsNumber = Q.defaultTerm(Q.L(101));
   describe('builders', () => {
+    describe('L', () => {
+      it('creates numbers', () => {
+        assert.deepStrictEqual(Q.L(7.8), {
+          type: 'literal',
+          value: {
+            type: 'number',
+            value: 7.8,
+          },
+        });
+      });
+      it('creates strings', () => {
+        assert.deepStrictEqual(Q.L('hello'), {
+          type: 'literal',
+          value: {
+            type: 'string',
+            value: 'hello',
+          },
+        });
+      });
+      it('creates Dates', () => {
+        const d = new Date();
+        assert.deepStrictEqual(Q.L(d), {
+          type: 'literal',
+          value: {
+            type: 'date',
+            value: d,
+          },
+        });
+      });
+      it('rejects invalid types', () => {
+        assert.throws(
+          () => Q.L(({ hi: 'hello' } as unknown) as string),
+          /SQM001/
+        );
+      });
+      it('rejects null', () => {
+        assert.throws(() => Q.L((null as unknown) as string), /SQM001/);
+      });
+      it('rejects undefined', () => {
+        assert.throws(() => Q.L((undefined as unknown) as string), /SQM001/);
+      });
+    });
     describe('defaultTerm', () => {
       it('works', () => {
         assert.deepStrictEqual(Q.defaultTerm(Q.L('hello')), {
@@ -40,6 +99,7 @@ describe('Q', () => {
           type: 'range',
           closedLower: true,
           closedUpper: true,
+          valueType: 'number',
           lower: 1,
           upper: 100,
         });
@@ -49,9 +109,41 @@ describe('Q', () => {
           type: 'range',
           closedLower: true,
           closedUpper: false,
+          valueType: 'number',
           lower: 1,
           upper: undefined,
         });
+      });
+
+      it('rejects invalid types', () => {
+        assert.throws(
+          () => Q.range(false, true, ({ hi: 'hello' } as unknown) as string),
+          /SQM001/
+        );
+      });
+      it('rejects mismatch types', () => {
+        assert.throws(
+          () => Q.range(false, true, 'a', (5 as unknown) as string),
+          /SQM003/
+        );
+      });
+      it('rejects dual null', () => {
+        assert.throws(
+          () =>
+            Q.range(
+              false,
+              true,
+              (null as unknown) as string,
+              (null as unknown) as string
+            ),
+          /SQM002/
+        );
+      });
+      it('rejects dual undefined', () => {
+        assert.throws(
+          () => Q.range(false, true, (undefined as unknown) as string),
+          /SQM002/
+        );
       });
     });
 
@@ -61,6 +153,7 @@ describe('Q', () => {
           type: 'range',
           closedLower: true,
           closedUpper: true,
+          valueType: 'number',
           lower: 1,
           upper: 100,
         });
@@ -70,6 +163,7 @@ describe('Q', () => {
           type: 'range',
           closedLower: true,
           closedUpper: true,
+          valueType: 'number',
           lower: 1,
           upper: undefined,
         });
@@ -77,9 +171,39 @@ describe('Q', () => {
           type: 'range',
           closedLower: true,
           closedUpper: true,
+          valueType: 'number',
           upper: 1,
           lower: undefined,
         });
+      });
+
+      it('rejects invalid types', () => {
+        assert.throws(
+          () => Q.closedRange(({ hi: 'hello' } as unknown) as string),
+          /SQM001/
+        );
+      });
+      it('rejects mismatch types', () => {
+        assert.throws(
+          () => Q.closedRange('a', (5 as unknown) as string),
+          /SQM003/
+        );
+      });
+      it('rejects dual null', () => {
+        assert.throws(
+          () =>
+            Q.closedRange(
+              (null as unknown) as string,
+              (null as unknown) as string
+            ),
+          /SQM002/
+        );
+      });
+      it('rejects dual undefined', () => {
+        assert.throws(
+          () => Q.closedRange((undefined as unknown) as string),
+          /SQM002/
+        );
       });
     });
 
@@ -89,6 +213,7 @@ describe('Q', () => {
           type: 'range',
           closedLower: false,
           closedUpper: false,
+          valueType: 'number',
           lower: 1,
           upper: 100,
         });
@@ -98,6 +223,7 @@ describe('Q', () => {
           type: 'range',
           closedLower: false,
           closedUpper: false,
+          valueType: 'number',
           lower: 1,
           upper: undefined,
         });
@@ -105,9 +231,38 @@ describe('Q', () => {
           type: 'range',
           closedLower: false,
           closedUpper: false,
+          valueType: 'number',
           upper: 1,
           lower: undefined,
         });
+      });
+      it('rejects invalid types', () => {
+        assert.throws(
+          () => Q.openRange(({ hi: 'hello' } as unknown) as string),
+          /SQM001/
+        );
+      });
+      it('rejects mismatch types', () => {
+        assert.throws(
+          () => Q.openRange('a', (5 as unknown) as string),
+          /SQM003/
+        );
+      });
+      it('rejects dual null', () => {
+        assert.throws(
+          () =>
+            Q.openRange(
+              (null as unknown) as string,
+              (null as unknown) as string
+            ),
+          /SQM002/
+        );
+      });
+      it('rejects dual undefined', () => {
+        assert.throws(
+          () => Q.openRange((undefined as unknown) as string),
+          /SQM002/
+        );
       });
     });
 
@@ -167,13 +322,6 @@ describe('Q', () => {
           }
         );
       });
-
-      it('works with 4 mixed terms/clauses', () => {
-        assert.deepStrictEqual(Q.and(lhs, rhs, rhs2, Q.L('h')), {
-          type: 'and',
-          operands: [lhs, rhs, rhs2, Q.L('h')],
-        });
-      });
     });
     describe('or', () => {
       it('works with 2 clauses', () => {
@@ -198,16 +346,47 @@ describe('Q', () => {
           }
         );
       });
-
-      it('works with 4 mixed terms/clauses', () => {
-        assert.deepStrictEqual(Q.or(lhs, rhs, rhs2, Q.L('h')), {
-          type: 'or',
-          operands: [lhs, rhs, rhs2, Q.L('h')],
-        });
-      });
     });
   });
   describe('toString', () => {
+    describe('converts fuzzed', () => {
+      async function fuzzRegistry() {
+        const ret = createCoreRegistry();
+        ret.register(...(await loadIoTsTypesFuzzers()));
+        return ret;
+      }
+      function verifyEncoder(gg: ExampleGenerator<tt.QueryElement>) {
+        for (let index = 0; index < 300; index++) {
+          const p = gg.encode([index, fuzzContext({ maxRecursionHint: 20 })]);
+          Q.toString(p);
+        }
+      }
+      it('literals', async () => {
+        const gg = (await fuzzRegistry()).exampleGenerator(tt.AnyLiteral);
+        verifyEncoder(gg as ExampleGenerator<tt.QueryElement>);
+      });
+      it('ranges', async () => {
+        const gg = (await fuzzRegistry()).exampleGenerator(tt.AnyRange);
+        verifyEncoder(gg as ExampleGenerator<tt.QueryElement>);
+      });
+      it('named terms', async () => {
+        const gg = (await fuzzRegistry()).exampleGenerator(tt.AnyNamedTerm);
+        verifyEncoder(gg as ExampleGenerator<tt.QueryElement>);
+      });
+      it('terms', async () => {
+        const gg = (await fuzzRegistry()).exampleGenerator(tt.AnyTerm);
+        verifyEncoder(gg as ExampleGenerator<tt.QueryElement>);
+      });
+      it('clauses', async () => {
+        const gg = (await fuzzRegistry()).exampleGenerator(tt.Clause);
+        verifyEncoder(gg as ExampleGenerator<tt.QueryElement>);
+      });
+      it('query elements', async () => {
+        const gg = (await fuzzRegistry()).exampleGenerator(tt.QueryElement);
+        verifyEncoder(gg as ExampleGenerator<tt.QueryElement>);
+      });
+    });
+
     it('escapes simple string literals', () => {
       assert.deepStrictEqual(Q.toString(Q.L('')), '""');
       assert.deepStrictEqual(Q.toString(Q.L('a')), '"a"');
@@ -256,6 +435,7 @@ describe('Q', () => {
       assert.deepStrictEqual(
         Q.toString({
           type: 'range',
+          valueType: 'number',
           closedLower: true,
           closedUpper: true,
           lower: 4,
@@ -265,6 +445,7 @@ describe('Q', () => {
       assert.deepStrictEqual(
         Q.toString({
           type: 'range',
+          valueType: 'number',
           closedLower: true,
           closedUpper: true,
           upper: 4,
@@ -277,6 +458,7 @@ describe('Q', () => {
       assert.deepStrictEqual(
         Q.toString({
           type: 'range',
+          valueType: 'number',
           closedLower: true,
           closedUpper: true,
           lower: 4,
@@ -287,6 +469,7 @@ describe('Q', () => {
       assert.deepStrictEqual(
         Q.toString({
           type: 'range',
+          valueType: 'number',
           closedLower: false,
           closedUpper: true,
           lower: 4,
@@ -297,6 +480,7 @@ describe('Q', () => {
       assert.deepStrictEqual(
         Q.toString({
           type: 'range',
+          valueType: 'number',
           closedLower: true,
           closedUpper: false,
           lower: 4,
@@ -307,6 +491,7 @@ describe('Q', () => {
       assert.deepStrictEqual(
         Q.toString({
           type: 'range',
+          valueType: 'number',
           closedLower: false,
           closedUpper: false,
           lower: 4,
@@ -320,6 +505,7 @@ describe('Q', () => {
       assert.deepStrictEqual(
         Q.toString({
           type: 'range',
+          valueType: 'string',
           closedLower: true,
           closedUpper: true,
           lower: 'b',
@@ -330,6 +516,7 @@ describe('Q', () => {
       assert.deepStrictEqual(
         Q.toString({
           type: 'range',
+          valueType: 'string',
           closedLower: false,
           closedUpper: true,
           lower: 'b',
@@ -340,6 +527,7 @@ describe('Q', () => {
       assert.deepStrictEqual(
         Q.toString({
           type: 'range',
+          valueType: 'string',
           closedLower: true,
           closedUpper: false,
           lower: 'b',
@@ -350,6 +538,7 @@ describe('Q', () => {
       assert.deepStrictEqual(
         Q.toString({
           type: 'range',
+          valueType: 'string',
           closedLower: false,
           closedUpper: false,
           lower: 'b',
@@ -457,32 +646,36 @@ describe('Q', () => {
     });
 
     describe('spatial', () => {
-      const obj = new Terraformer.Polygon([
-        [[10.0, 0.0], [101.0, 21.0], [60.0, 1.024], [10.0, 0.0]],
-        [[0, 0], [-10, -10], [20, 30], [0, 0]],
-      ]);
+      const p: Polygon = {
+        type: 'Polygon',
+        coordinates: [
+          [[10.0, 0.0], [101.0, 21.0], [60.0, 1.024], [10.0, 0.0]],
+          [[0, 0], [-10, -10], [20, 30], [0, 0]],
+        ],
+      };
+      const obj = d(PolygonIO.decode(p));
       it('intersects', () => {
         assert.deepStrictEqual(
           Q.toString(Q.term('geo', Q.spatial.intersects(obj))),
-          'geo:"Intersects(POLYGON ((10 0, 101 21, 60 1.024, 10 0), (0 0, -10 -10, 20 30, 0 0)))"'
+          'geo:"Intersects(POLYGON((10 0,101 21,60 1.024,10 0),(0 0,-10 -10,20 30,0 0)))"'
         );
       });
       it('contains', () => {
         assert.deepStrictEqual(
           Q.toString(Q.term('geo', Q.spatial.contains(obj))),
-          'geo:"Contains(POLYGON ((10 0, 101 21, 60 1.024, 10 0), (0 0, -10 -10, 20 30, 0 0)))"'
+          'geo:"Contains(POLYGON((10 0,101 21,60 1.024,10 0),(0 0,-10 -10,20 30,0 0)))"'
         );
       });
       it('isDisjointTo', () => {
         assert.deepStrictEqual(
           Q.toString(Q.term('geo', Q.spatial.isDisjointTo(obj))),
-          'geo:"IsDisjointTo(POLYGON ((10 0, 101 21, 60 1.024, 10 0), (0 0, -10 -10, 20 30, 0 0)))"'
+          'geo:"IsDisjointTo(POLYGON((10 0,101 21,60 1.024,10 0),(0 0,-10 -10,20 30,0 0)))"'
         );
       });
       it('isWithin', () => {
         assert.deepStrictEqual(
           Q.toString(Q.term('geo', Q.spatial.isWithin(obj))),
-          'geo:"IsWithin(POLYGON ((10 0, 101 21, 60 1.024, 10 0), (0 0, -10 -10, 20 30, 0 0)))"'
+          'geo:"IsWithin(POLYGON((10 0,101 21,60 1.024,10 0),(0 0,-10 -10,20 30,0 0)))"'
         );
       });
     });
@@ -502,9 +695,40 @@ describe('Q', () => {
 
       assert.deepStrictEqual(
         Q.toString(q),
-        '(geo:"Intersects(POINT (-122.17381 37.426002))" OR "spicy" OR product:([100 TO *] AND (NOT 600)))'
+        '(geo:"Intersects(POINT(-122.17381 37.426002))" OR "spicy" OR product:([100 TO *] AND (NOT 600)))'
       );
     });
+
+    it('works on GeometryCollections', () => {
+      const q = Q.term(
+        'geo',
+        Q.spatial.intersects({
+          type: 'GeometryCollection',
+          geometries: [
+            {
+              type: 'Point',
+              coordinates: [-122.17381, 37.426002],
+            },
+            {
+              type: 'Polygon',
+              coordinates: [
+                [
+                  [-122.17381, 37.426002],
+                  [12.181, 39.426002],
+                  [-122.17381, 37.426002],
+                ],
+              ],
+            },
+          ],
+        })
+      );
+
+      assert.deepStrictEqual(
+        Q.toString(q),
+        'geo:"Intersects(GEOMETRYCOLLECTION(POINT(-122.17381 37.426002),POLYGON((-122.17381 37.426002,12.181 39.426002,-122.17381 37.426002))))"'
+      );
+    });
+
     it('works on complex tree 2', () => {
       assert.deepStrictEqual(
         Q.toString(

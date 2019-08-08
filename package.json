@@ -45,7 +45,7 @@
     "clean.tests": "rm -rf *.lcov .nyc_output *.log coverage",
     "test:postinstall": "yarn clean && yarn build && yarn test-impl --grep='#e2e' --invert",
     "test": "yarn clean && yarn build && yarn test-impl",
-    "test-impl": "nyc --reporter=text --reporter=lcov mocha",
+    "test-impl": "nyc --reporter=lcov --reporter=text mocha",
     "test-impl-lcov": "nyc --reporter=lcov mocha",
     "test-coverage": "yarn test && yarn report-coverage",
     "report-coverage": "nyc report --reporter=json && codecov -F unit -f coverage/*.json",
@@ -99,23 +99,27 @@
     "spec": "./build/test/**/test-*.js"
   },
   "dependencies": {
-    "terraformer-wkt-parser": "^1.2.0"
+    "@holvonix-misc/geojson-iots": "^3.0.1",
+    "fp-ts": "^2.0.4",
+    "io-ts": "^2.0.1",
+    "io-ts-types": "^0.5.0",
+    "monocle-ts": "^2.0.0",
+    "wkx": "^0.4.8"
   },
   "devDependencies": {
     "@holvonix-open/release-config-js": "^1.0.3",
-    "@types/geojson": "^7946.0.7",
     "@types/mocha": "^5.2.5",
     "@types/nock": "^10.0.3",
-    "@types/node": "^12.6.1",
+    "@types/node": "^12.7.1",
     "chokidar-cli": "^2.0.0",
     "codecov": "^3.4.0",
     "concurrently": "^4.1.1",
     "gts": "^1.0.0",
+    "io-ts-fuzzer": "^3.0.5",
     "mocha": "^6.1.4",
     "nock": "^10.0.6",
     "nyc": "^14.1.1",
     "source-map-support": "^0.5.12",
-    "terraformer": "https://github.com/holvonix-open/terraformer#typesafety",
     "ts-mocha": "^6.0.0",
     "typescript": "~3.5.0"
   }

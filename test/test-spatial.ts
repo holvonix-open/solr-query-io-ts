@@ -1,18 +1,20 @@
 import * as assert from 'assert';
 import { Q } from '../src/index';
-import * as geojson from 'geojson';
+import { Polygon } from '@holvonix-misc/geojson-iots';
 
 describe('spatial', () => {
   describe('builders', () => {
-    const geo = {} as geojson.Polygon;
+    const geom = {} as Polygon;
     describe('intersects', () => {
       it('works', () => {
-        assert.deepStrictEqual(Q.spatial.intersects(geo), {
+        assert.deepStrictEqual(Q.spatial.intersects(geom), {
           type: 'literal',
           value: {
             type: 'spatial',
-            op: 'Intersects',
-            value: geo,
+            value: {
+              op: 'Intersects',
+              geom,
+            },
           },
         });
       });
@@ -20,12 +22,14 @@ describe('spatial', () => {
 
     describe('contains', () => {
       it('works', () => {
-        assert.deepStrictEqual(Q.spatial.contains(geo), {
+        assert.deepStrictEqual(Q.spatial.contains(geom), {
           type: 'literal',
           value: {
             type: 'spatial',
-            op: 'Contains',
-            value: geo,
+            value: {
+              op: 'Contains',
+              geom,
+            },
           },
         });
       });
@@ -33,12 +37,14 @@ describe('spatial', () => {
 
     describe('isDisjointTo', () => {
       it('works', () => {
-        assert.deepStrictEqual(Q.spatial.isDisjointTo(geo), {
+        assert.deepStrictEqual(Q.spatial.isDisjointTo(geom), {
           type: 'literal',
           value: {
             type: 'spatial',
-            op: 'IsDisjointTo',
-            value: geo,
+            value: {
+              op: 'IsDisjointTo',
+              geom,
+            },
           },
         });
       });
@@ -46,12 +52,14 @@ describe('spatial', () => {
 
     describe('isWithin', () => {
       it('works', () => {
-        assert.deepStrictEqual(Q.spatial.isWithin(geo), {
+        assert.deepStrictEqual(Q.spatial.isWithin(geom), {
           type: 'literal',
           value: {
             type: 'spatial',
-            op: 'IsWithin',
-            value: geo,
+            value: {
+              op: 'IsWithin',
+              geom,
+            },
           },
         });
       });
