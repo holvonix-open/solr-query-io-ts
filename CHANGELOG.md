@@ -1,3 +1,11 @@
+## [3.0.1](https://github.com/holvonix-open/solr-query-io-ts/compare/v3.0.0...v3.0.1) (2019-08-10)
+
+
+### 📖 Documentation
+
+* add min size badge [skip-release] ([14e4a8f](https://github.com/holvonix-open/solr-query-io-ts/commit/14e4a8f))
+* clarify license ([3f57cfc](https://github.com/holvonix-open/solr-query-io-ts/commit/3f57cfc))
+
 # [3.0.0](https://github.com/holvonix-open/solr-query-io-ts/compare/v2.0.1...v3.0.0) (2019-08-10)
 
 
