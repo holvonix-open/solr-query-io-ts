@@ -28,16 +28,11 @@ import {
   LDate,
   LNumber,
   RangedPrimitive,
-  QueryElement,
 } from './types';
 
 import * as util from 'util';
 
 import * as spatial from './spatial';
-import * as wktio from 'wkt-io-ts';
-import { WKT } from 'wkt-io-ts';
-import { isRight } from 'fp-ts/lib/Either';
-import { PathReporter } from 'io-ts/lib/PathReporter';
 
 export { spatial };
 
@@ -250,105 +245,4 @@ export function or<U>(...more: U[]): OrBase<U> {
     type: 'or',
     operands: more,
   };
-}
-
-/* istanbul ignore next */
-function nope(): never {
-  throw new Error('unsupported');
-}
-
-function wkt(g: Spatial['value']['geom']): WKT {
-  const d = wktio.WKTStringFromGeometry.decode(g);
-  if (!isRight(d)) {
-    throw new Error('Cannot parse: ' + PathReporter.report(d).join('; '));
-  }
-  return d.right;
-}
-
-function toLiteralString<T extends Primitive>(
-  ct: T['type'],
-  c?: T['value']
-): string {
-  if (c == null) {
-    return '*';
-  }
-  switch (ct) {
-    case 'string':
-      return quoteString(c as string);
-    case 'number':
-      return `${c as number}`;
-    case 'date':
-      return (c as Date).toISOString();
-    case 'spatial':
-      return quoteString(
-        `${(c as Spatial['value']).op}(${wkt((c as Spatial['value']).geom)})`
-      );
-    case 'glob':
-      return escapedGlob(c as string);
-    /* istanbul ignore next */
-    default:
-      /* istanbul ignore next */
-      return nope();
-  }
-}
-
-function toRangeString(v: Range<RangedPrimitive>): string {
-  return (
-    (v.closedLower ? '[' : '{') +
-    toLiteralString(v.valueType, v.lower) +
-    ' TO ' +
-    toLiteralString(v.valueType, v.upper) +
-    (v.closedUpper ? ']' : '}')
-  );
-}
-
-function escapedGlob(v: string) {
-  // don't escape * or ?
-  return v.replace(/[ +\-&|!(){}\[\]^"~:/\\]/g, '\\$&');
-}
-
-function quoteString(v: string) {
-  return `"${v.replace(/["\\]/g, '\\$&')}"`;
-}
-
-function binaryOp(op: string, operands: QueryElement[]) {
-  const elems: string[] = [];
-  for (const v of operands) {
-    elems.push(toStringImpl(v));
-  }
-  return `(${elems.join(` ${op} `)})`;
-}
-
-function toStringImpl(c: QueryElement): string {
-  switch (c.type) {
-    case 'range':
-      return toRangeString(c);
-    case 'term':
-      return toStringImpl(c.value);
-    case 'namedterm':
-      return c.field + ':' + toStringImpl(c.value);
-    case 'and':
-      return binaryOp('AND', c.operands);
-    case 'constant':
-      return `(${toStringImpl(c.lhs)})^=${c.rhs}`;
-    case 'not':
-      return `(NOT ${toStringImpl(c.rhs)})`;
-    case 'or':
-      return binaryOp('OR', c.operands);
-    case 'prohibited':
-      return `-${toStringImpl(c.rhs)}`;
-    case 'required':
-      return `+${toStringImpl(c.rhs)}`;
-    case 'literal':
-      return toLiteralString(c.value.type, c.value.value);
-    /* istanbul ignore next */
-    default:
-      console.error(util.inspect(c, false, 1000, true));
-      /* istanbul ignore next */
-      return nope();
-  }
-}
-
-export function toString(c: QueryElement): string {
-  return toStringImpl(c);
 }
