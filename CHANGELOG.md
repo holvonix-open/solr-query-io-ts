@@ -1,3 +1,28 @@
+# [3.0.0](https://github.com/holvonix-open/solr-query-io-ts/compare/v2.0.1...v3.0.0) (2019-08-10)
+
+
+### 🌟🚀 Features
+
+* introduce SolrQueryFromElement which generates a Solr query string from QueryElements, with input validation ([ca1ef0e](https://github.com/holvonix-open/solr-query-io-ts/commit/ca1ef0e))
+
+
+### 🐛 Bug Fixes
+
+* migrate to wkt-io-ts which will validate the geojson and WKT ([023db16](https://github.com/holvonix-open/solr-query-io-ts/commit/023db16))
+* upgrade deps ([4904890](https://github.com/holvonix-open/solr-query-io-ts/commit/4904890))
+
+
+### 💄 Polish
+
+* rename to solr-query-io-ts ([f590ac5](https://github.com/holvonix-open/solr-query-io-ts/commit/f590ac5))
+
+
+### ⚠️ BREAKING CHANGES
+
+* move package to solr-query-io-ts from solr-query-maker
+* `Q.toString` has been removed and replaced with `SolrQueryFromElement.decode` which validates its input
+* @holvonix-open/geojson-io-ts v5+ requires 2-dimensional positions and non-empty arrays
+
 ## [2.0.1](https://github.com/holvonix-open/solr-query-io-ts/compare/v2.0.0...v2.0.1) (2019-08-10)
 
 
