@@ -1,3 +1,16 @@
+## [3.0.2](https://github.com/holvonix-open/solr-query-io-ts/compare/v3.0.1...v3.0.2) (2019-08-10)
+
+
+### 📖 Documentation
+
+* update deepscan badge ([75520db](https://github.com/holvonix-open/solr-query-io-ts/commit/75520db))
+
+
+### 🧦 Miscellaneous
+
+* **deps-dev:** bump @holvonix-open/release-config-js ([#20](https://github.com/holvonix-open/solr-query-io-ts/issues/20)) ([448314e](https://github.com/holvonix-open/solr-query-io-ts/commit/448314e))
+* **deps-dev:** bump io-ts-fuzzer from 4.1.1 to 4.1.3 ([#22](https://github.com/holvonix-open/solr-query-io-ts/issues/22)) ([6c83971](https://github.com/holvonix-open/solr-query-io-ts/commit/6c83971))
+
 ## [3.0.1](https://github.com/holvonix-open/solr-query-io-ts/compare/v3.0.0...v3.0.1) (2019-08-10)
 
 
