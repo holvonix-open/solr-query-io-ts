@@ -663,6 +663,19 @@ describe('Q', () => {
         ],
       };
       const obj = d(PolygonIO.decode(p));
+      it('throws on bad geojson', () => {
+        const bad: Polygon = {
+          type: 'PolygonZ' as 'Polygon',
+          coordinates: [
+            [[10.0, 0.0], [101.0, 21.0], [60.0, 1.024], [10.0, 0.0]],
+            [[0, 0], [-10, -10], [20, 30], [0, 0]],
+          ],
+        };
+        assert.throws(
+          () => Q.toString(Q.term('geo', Q.spatial.intersects(bad))),
+          /Invalid value/
+        );
+      });
       it('intersects', () => {
         assert.deepStrictEqual(
           Q.toString(Q.term('geo', Q.spatial.intersects(obj))),

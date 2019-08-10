@@ -111,7 +111,7 @@
     "io-ts": "^2.0.1",
     "io-ts-types": "^0.5.0",
     "monocle-ts": "^2.0.0",
-    "wkx": "^0.4.8"
+    "wkt-io-ts": "^1.0.0"
   },
   "devDependencies": {
     "@holvonix-open/release-config-js": "^1.0.4",

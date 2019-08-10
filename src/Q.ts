@@ -34,7 +34,10 @@ import {
 import * as util from 'util';
 
 import * as spatial from './spatial';
-import * as wkx from 'wkx';
+import * as wktio from 'wkt-io-ts';
+import { WKT } from 'wkt-io-ts';
+import { isRight } from 'fp-ts/lib/Either';
+import { PathReporter } from 'io-ts/lib/PathReporter';
 
 export { spatial };
 
@@ -254,8 +257,12 @@ function nope(): never {
   throw new Error('unsupported');
 }
 
-function wkt(g: Spatial['value']['geom']): string {
-  return wkx.Geometry.parseGeoJSON(g).toWkt();
+function wkt(g: Spatial['value']['geom']): WKT {
+  const d = wktio.WKTStringFromGeometry.decode(g);
+  if (!isRight(d)) {
+    throw new Error('Cannot parse: ' + PathReporter.report(d).join('; '));
+  }
+  return d.right;
 }
 
 function toLiteralString<T extends Primitive>(
