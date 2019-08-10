@@ -8,6 +8,7 @@
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=holvonix-open/solr-query-io-ts)](https://dependabot.com)
 [![DeepScan grade](https://deepscan.io/api/teams/4465/projects/6353/branches/52803/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=4465&pid=6353&bid=52803)
 [![Code Style: Google](https://img.shields.io/badge/code%20style-google-blueviolet.svg)](https://github.com/google/gts)
+[![npm bundle size](https://img.shields.io/bundlephobia/min/solr-query-io-ts.svg)](https://bundlephobia.com/result?p=solr-query-io-ts)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 ## Quick Start
