@@ -1,3 +1,15 @@
+## [2.0.1](https://github.com/holvonix-open/solr-query-maker/compare/v2.0.0...v2.0.1) (2019-08-10)
+
+
+### 🐛 Bug Fixes
+
+* **deps:** bump fp-ts and various dev-deps ([e259b6d](https://github.com/holvonix-open/solr-query-maker/commit/e259b6d))
+
+
+### 🧦 Miscellaneous
+
+* this is a library, prod deps are chores by default ([552d48c](https://github.com/holvonix-open/solr-query-maker/commit/552d48c))
+
 # [2.0.0](https://github.com/holvonix-open/solr-query-maker/compare/v1.0.3...v2.0.0) (2019-08-08)
 
 
