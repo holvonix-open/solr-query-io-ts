@@ -1,6 +1,6 @@
 import * as t from 'io-ts';
 import { date } from 'io-ts-types/lib/date';
-import * as geojson from '@holvonix-misc/geojson-iots';
+import * as geojson from '@holvonix-open/geojson-io-ts';
 
 /* tslint:disable:variable-name */
 

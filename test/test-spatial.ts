@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import { Q } from '../src/index';
-import { Polygon } from '@holvonix-misc/geojson-iots';
+import { Polygon } from '@holvonix-open/geojson-io-ts';
 
 describe('spatial', () => {
   describe('builders', () => {

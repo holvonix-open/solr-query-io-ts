@@ -6,7 +6,7 @@ import {
   IsDisjointTo,
   Literal,
 } from './types';
-import * as geojson from '@holvonix-misc/geojson-iots';
+import * as geojson from '@holvonix-open/geojson-io-ts';
 
 function spatialPredicate<T extends Spatial['value']['op']>(
   op: T,

@@ -7,10 +7,18 @@ import {
   loadIoTsTypesFuzzers,
   ExampleGenerator,
   fuzzContext,
+  experimental,
+  Fuzzer,
 } from 'io-ts-fuzzer';
-import { PolygonIO, Polygon } from '@holvonix-misc/geojson-iots';
+import { PolygonIO, Polygon, PositionIO } from '@holvonix-open/geojson-io-ts';
 import { Either, isRight } from 'fp-ts/lib/Either';
 import { Errors } from 'io-ts';
+import { nonEmptyArray } from 'io-ts-types/lib/nonEmptyArray';
+
+const coordFuzzers = [
+  experimental.nonEmptyArrayFuzzer(PositionIO),
+  experimental.nonEmptyArrayFuzzer(nonEmptyArray(PositionIO)),
+];
 
 describe('Q', () => {
   const d = <B>(v: Either<Errors, B>) => {
@@ -353,6 +361,7 @@ describe('Q', () => {
       async function fuzzRegistry() {
         const ret = createCoreRegistry();
         ret.register(...(await loadIoTsTypesFuzzers()));
+        ret.register(...(coordFuzzers as Fuzzer[]));
         return ret;
       }
       function verifyEncoder(gg: ExampleGenerator<tt.QueryElement>) {

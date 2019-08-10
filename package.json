@@ -106,7 +106,7 @@
     "spec": "./build/test/**/test-*.js"
   },
   "dependencies": {
-    "@holvonix-misc/geojson-iots": "^3.0.1",
+    "@holvonix-open/geojson-io-ts": "^5.0.0",
     "fp-ts": "^2.0.5",
     "io-ts": "^2.0.1",
     "io-ts-types": "^0.5.0",
@@ -114,7 +114,7 @@
     "wkx": "^0.4.8"
   },
   "devDependencies": {
-    "@holvonix-open/release-config-js": "^1.0.3",
+    "@holvonix-open/release-config-js": "^1.0.4",
     "@types/mocha": "^5.2.5",
     "@types/nock": "^10.0.3",
     "@types/node": "^12.7.1",
@@ -123,7 +123,7 @@
     "concurrently": "^4.1.1",
     "gts": "^1.0.0",
     "husky": "^3.0.3",
-    "io-ts-fuzzer": "^4.0.0",
+    "io-ts-fuzzer": "^4.1.1",
     "mocha": "^6.1.4",
     "nock": "^10.0.6",
     "nyc": "^14.1.1",

@@ -90,15 +90,15 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@holvonix-misc/geojson-iots@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@holvonix-misc/geojson-iots/-/geojson-iots-3.0.1.tgz#3804be935a9cbe0aeabedfd8cd2368306c29d25b"
-  integrity sha512-wqjWE4fAC9ou71tzh7HeOfeKUsviuaJaMum5RxzgIF5MllDlu8F7TW3NRdLrkOQWp/16TUbD3U1zKxME0m1oLA==
+"@holvonix-open/geojson-io-ts@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@holvonix-open/geojson-io-ts/-/geojson-io-ts-5.0.0.tgz#f3b68d5f566c56ea755291c72bbe979085d001e6"
+  integrity sha512-Jh6kThOWlL+kPYTwDs0RyPwbw1FBMtcBMYXfDUCtLQY9kKZO4luZsXjqh2ahRRmvuf3RAGfpdLHMwpqKx7cSmw==
 
-"@holvonix-open/release-config-js@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@holvonix-open/release-config-js/-/release-config-js-1.0.3.tgz#2164fbe4a26ca9ad18a90e3da89d05b5c3aa6906"
-  integrity sha512-hGZvzztOeHY+7Tw5Wb0KiwN3IS7MCzY3GCLO4KoR7Y7BMLFUxbuTJ172jN8XVvG0F9pAIp980CXaaJJrzvXsFQ==
+"@holvonix-open/release-config-js@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@holvonix-open/release-config-js/-/release-config-js-1.0.4.tgz#e01047ee37170289b94ffaa1aed6e005a4b1f00b"
+  integrity sha512-hL9BNwmOJ712VTEjjqDKSWUwCQ9HbRo0nnnhTJ/HY82AUYzkg9bL9Z1vCdjcaJqDoYCoHqZWVnN9cd7etgoLVg==
   dependencies:
     "@semantic-release/changelog" "^3.0.4"
     "@semantic-release/git" "^7.0.16"
@@ -342,6 +342,11 @@
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/@types/retry/-/retry-0.12.0.tgz#2b35eccfcee7d38cd72ad99232fbd58bffb3c84d"
   integrity sha512-wWKOClTTiizcZhXnPY4wikVAwmdYHp8q6DmC+EJUzAMsycb7HB32Kh9RN4+0gExjmPmZSAQjgURXIGATPegAvA==
+
+"@types/seedrandom@^2.4.28":
+  version "2.4.28"
+  resolved "https://registry.yarnpkg.com/@types/seedrandom/-/seedrandom-2.4.28.tgz#9ce8fa048c1e8c85cb71d7fe4d704e000226036f"
+  integrity sha512-SMA+fUwULwK7sd/ZJicUztiPs8F1yCPwF3O23Z9uQ32ME5Ha0NmDK9+QTsYE4O2tHXChzXomSWWeIhCnoN1LqA==
 
 JSONStream@^1.0.4, JSONStream@^1.3.4, JSONStream@^1.3.5:
   version "1.3.5"
@@ -2331,11 +2336,12 @@ invert-kv@^2.0.0:
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-2.0.0.tgz#7393f5afa59ec9ff5f67a27620d11c226e3eec02"
   integrity sha512-wPVv/y/QQ/Uiirj/vh3oP+1Ww+AWehmi1g5fFWGPF6IpCBCDVrhgHRMvrLfdYcwDh3QJbGXDW4JAuzxElLSqKA==
 
-io-ts-fuzzer@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/io-ts-fuzzer/-/io-ts-fuzzer-4.0.0.tgz#4a437dac404e4d7709c31349654a03ef54d4e239"
-  integrity sha512-ze9+xTzqCwaGfGXKczbVBxeZwZ2ic8133GUUhgnlXq48g8L1dlgHXGRtF3V5ylssq7YCtXhl7k3EO6wFIpX5NA==
+io-ts-fuzzer@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/io-ts-fuzzer/-/io-ts-fuzzer-4.1.1.tgz#90c057ed19791834737c4522a58787922193679b"
+  integrity sha512-RMXdx2oYN0TiSESIiR3fYneye9Cqb39Ox6Tky731wBy+YPzs9vHfAdCc+giRTNUzAAdz5Rjt22p1WCaeaS4H5w==
   dependencies:
+    "@types/seedrandom" "^2.4.28"
     seedrandom "^3.0.1"
 
 io-ts-types@^0.5.0:
