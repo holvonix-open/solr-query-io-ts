@@ -24,4 +24,6 @@ Third-party dependencies may have their own licenses.
 import * as Q from './Q';
 
 export * from './types';
+export * from './query';
+
 export { Q };
