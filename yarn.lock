@@ -96,9 +96,9 @@
   integrity sha512-Jh6kThOWlL+kPYTwDs0RyPwbw1FBMtcBMYXfDUCtLQY9kKZO4luZsXjqh2ahRRmvuf3RAGfpdLHMwpqKx7cSmw==
 
 "@holvonix-open/release-config-js@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@holvonix-open/release-config-js/-/release-config-js-1.0.4.tgz#e01047ee37170289b94ffaa1aed6e005a4b1f00b"
-  integrity sha512-hL9BNwmOJ712VTEjjqDKSWUwCQ9HbRo0nnnhTJ/HY82AUYzkg9bL9Z1vCdjcaJqDoYCoHqZWVnN9cd7etgoLVg==
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@holvonix-open/release-config-js/-/release-config-js-1.0.5.tgz#d64d2fe39124ef2042faad7cd18b14a8c3c4c97b"
+  integrity sha512-WhbTtJz64Q00G/xRzeZ/fuAF9toTIBvd8bGen8Y2mGsOv7pRhaQoNm0xftSxyPEwsb5IMhHS/VNawbjPw5giaQ==
   dependencies:
     "@semantic-release/changelog" "^3.0.4"
     "@semantic-release/git" "^7.0.16"
