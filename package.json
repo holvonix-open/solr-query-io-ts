@@ -1,10 +1,10 @@
 {
-  "name": "solr-query-maker",
+  "name": "solr-query-io-ts",
   "version": "2.0.1",
   "description": "A Solr Query builder and types",
   "repository": {
     "type": "git",
-    "url": "https://github.com/holvonix-open/solr-query-maker.git"
+    "url": "https://github.com/holvonix-open/solr-query-io-ts.git"
   },
   "keywords": [
     "solr",

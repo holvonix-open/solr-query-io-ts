@@ -1,8 +1,8 @@
 /*!
-# solr-query-maker
+# solr-query-io-ts
 
 This product contains software originally developed by Holvonix LLC.
-Original Repository: https://github.com/holvonix-open/solr-query-maker
+Original Repository: https://github.com/holvonix-open/solr-query-io-ts
 
 Copyright (c) 2019 Holvonix LLC. All rights reserved.
 

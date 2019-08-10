@@ -138,7 +138,7 @@ export const SolrQueryFromElement: SolrQueryFromElementC = new t.Type<
   SolrQuery,
   unknown
 >(
-  'solr-query-maker:SolrQueryFromElement',
+  'solr-query-io-ts:SolrQueryFromElement',
   /* istanbul ignore next */
   (_): _ is SolrQuery => {
     throw new Error();
