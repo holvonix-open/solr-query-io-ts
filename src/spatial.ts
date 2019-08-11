@@ -1,5 +1,5 @@
 import {
-  Spatial,
+  LSpatial,
   Intersects,
   IsWithin,
   Contains,
@@ -8,7 +8,7 @@ import {
 } from './types';
 import * as geojson from '@holvonix-open/geojson-io-ts';
 
-function spatialPredicate<T extends Spatial['value']['op']>(
+function spatialPredicate<T extends LSpatial['value']['op']>(
   op: T,
   value: geojson.GeometryObject
 ) {

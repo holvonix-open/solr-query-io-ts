@@ -93,7 +93,7 @@ describe('query', () => {
       }
       it('primitives', async () => {
         const gg = (await fuzzRegistry()).exampleGenerator(
-          union([tt.Spatial, tt.LNumber, tt.LDate, tt.LString, tt.Glob])
+          union([tt.LSpatial, tt.LNumber, tt.LDate, tt.LString, tt.LGlob])
         );
         verifyEncoderThrows(gg as ExampleGenerator<tt.QueryElement>);
       });
