@@ -1,3 +1,16 @@
+# [5.0.0](https://github.com/holvonix-open/solr-query-io-ts/compare/v4.0.0...v5.0.0) (2019-08-11)
+
+
+### 🐛 Bug Fixes
+
+* throw on invalid primitive types instead of returning undefined ([#24](https://github.com/holvonix-open/solr-query-io-ts/issues/24)) ([f8e5320](https://github.com/holvonix-open/solr-query-io-ts/commit/f8e5320))
+
+
+### ⚠️ BREAKING CHANGES
+
+* `Spatial` renamed to `LSpatial`
+* `Glob` renamed to `LGlob`
+
 # [4.0.0](https://github.com/holvonix-open/solr-query-io-ts/compare/v3.0.2...v4.0.0) (2019-08-11)
 
 
