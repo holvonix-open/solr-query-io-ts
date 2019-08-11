@@ -75,14 +75,20 @@ function forPrimitives<A, O = A, I = unknown>(
   return new Map(e);
 }
 
-export const Literal = forPrimitives(<T extends PrimitiveC>(c: PrimitiveC) =>
+const literal = forPrimitives(<T extends PrimitiveC>(c: PrimitiveC) =>
   t.type({
     type: t.literal('literal'),
     value: c,
   })
 );
+export function Literal<T extends PrimitiveC>(
+  c: T
+): t.Type<Literal<t.TypeOf<T>>> {
+  return literal.get(c)! as t.Type<Literal<t.TypeOf<T>>>;
+}
+
 export type SomeLiteral = t.Type<Literal<Primitive>>;
-export const AnyLiteral = t.union(Array.from(Literal).map(x => x[1]) as [
+export const AnyLiteral = t.union(Array.from(literal).map(x => x[1]) as [
   SomeLiteral,
   SomeLiteral,
   ...SomeLiteral[]
@@ -120,7 +126,7 @@ function forRangedPrimitives<A, O, I>(
   return new Map(e);
 }
 
-export const Range = forRangedPrimitives(<T extends RangedPrimitiveC>(c: T) =>
+const range = forRangedPrimitives(<T extends RangedPrimitiveC>(c: T) =>
   t.intersection([
     t.type({
       type: t.literal('range'),
@@ -134,8 +140,13 @@ export const Range = forRangedPrimitives(<T extends RangedPrimitiveC>(c: T) =>
     }),
   ])
 );
+export function Range<T extends RangedPrimitiveC>(
+  c: T
+): t.Type<Range<t.TypeOf<T>>> {
+  return range.get(c)! as t.Type<Range<t.TypeOf<T>>>;
+}
 export type SomeRange = t.Type<Range<RangedPrimitive>>;
-export const AnyRange = t.union(Array.from(Range).map(x => x[1]) as [
+export const AnyRange = t.union(Array.from(range).map(x => x[1]) as [
   SomeRange,
   SomeRange,
   ...SomeRange[]
@@ -171,33 +182,33 @@ export type TermValue<T extends Primitive> =
   | MaybeGlob<T>
   | MaybeRange<T>
   | NonPrimitiveTermValue<T>;
-export const TermValue = forPrimitives<TermValue<t.TypeOf<PrimitiveC>>>(
+const termValue = forPrimitives<TermValue<t.TypeOf<PrimitiveC>>>(
   <T extends PrimitiveC>(c: T): t.Type<TermValue<t.TypeOf<PrimitiveC>>> =>
     t.recursion(`TermValue<${c.name}>`, () => {
-      let ret: t.Type<TermValue<t.TypeOf<PrimitiveC>>> | undefined = undefined;
+      let ret: t.Type<TermValue<t.TypeOf<T>>> | undefined = undefined;
       if (IsGlobPrimitiveC(c)) {
-        ret = Literal.get(Glob)! as t.Type<TermValue<t.TypeOf<PrimitiveC>>>;
+        ret = Literal(Glob) as t.Type<TermValue<t.TypeOf<T>>>;
       }
       if (IsRangedPrimitiveC(c)) {
-        ret = (ret ? t.union([ret, Range.get(c)!]) : Range.get(c)!) as t.Type<
-          TermValue<t.TypeOf<PrimitiveC>>
+        ret = (ret ? t.union([ret, Range(c)]) : Range(c)) as t.Type<
+          TermValue<t.TypeOf<T>>
         >;
       }
       if (ret) {
-        ret = t.union([
-          Literal.get(c)!,
-          NonPrimitiveTermValue.get(c)!,
-          ret,
-        ]) as t.Type<TermValue<t.TypeOf<PrimitiveC>>>;
+        ret = t.union([Literal(c), NonPrimitiveTermValue(c), ret]);
       } else {
-        ret = t.union([
-          Literal.get(c)!,
-          NonPrimitiveTermValue.get(c)!,
-        ]) as t.Type<TermValue<t.TypeOf<PrimitiveC>>>;
+        ret = t.union([Literal(c), NonPrimitiveTermValue(c)]) as t.Type<
+          TermValue<t.TypeOf<T>>
+        >;
       }
-      return ret!;
+      return ret! as t.Type<TermValue<t.TypeOf<PrimitiveC>>>;
     })
 );
+export function TermValue<T extends PrimitiveC>(
+  c: T
+): t.Type<TermValue<t.TypeOf<T>>> {
+  return termValue.get(c)! as t.Type<TermValue<t.TypeOf<T>>>;
+}
 
 export interface AndBase<U> {
   type: 'and';
@@ -211,13 +222,18 @@ const AndBase = <U extends t.Any>(c: U) =>
 export interface And extends AndBase<Clause> {}
 export const And = t.recursion<And>('And', (): t.Type<And> => AndBase(Clause));
 export interface AndTerm<T extends Primitive> extends AndBase<TermValue<T>> {}
-export const AndTerm = forPrimitives(
+const andTerm = forPrimitives(
   <U extends PrimitiveC>(c: U): t.Type<AndTerm<t.TypeOf<U>>> =>
     t.recursion(
       `AndTerm<${c.name}>`,
-      () => AndBase(TermValue.get(c)!) as t.Type<AndTerm<t.TypeOf<U>>>
+      () => AndBase(TermValue(c)) as t.Type<AndTerm<t.TypeOf<U>>>
     )
 );
+export function AndTerm<T extends PrimitiveC>(
+  c: T
+): t.Type<AndTerm<t.TypeOf<T>>> {
+  return andTerm.get(c)! as t.Type<AndTerm<t.TypeOf<T>>>;
+}
 
 export interface OrBase<U> {
   type: 'or';
@@ -231,13 +247,18 @@ const OrBase = <U extends t.Any>(c: U) =>
 export interface Or extends OrBase<Clause> {}
 export const Or = t.recursion<Or>('Or', (): t.Type<Or> => OrBase(Clause));
 export interface OrTerm<T extends Primitive> extends OrBase<TermValue<T>> {}
-export const OrTerm = forPrimitives(
+const orTerm = forPrimitives(
   <U extends PrimitiveC>(c: U): t.Type<OrTerm<t.TypeOf<U>>> =>
     t.recursion(
       `OrTerm<${c.name}>`,
-      () => OrBase(TermValue.get(c)!) as t.Type<OrTerm<t.TypeOf<U>>>
+      () => OrBase(TermValue(c)) as t.Type<OrTerm<t.TypeOf<U>>>
     )
 );
+export function OrTerm<T extends PrimitiveC>(
+  c: T
+): t.Type<OrTerm<t.TypeOf<T>>> {
+  return orTerm.get(c)! as t.Type<OrTerm<t.TypeOf<T>>>;
+}
 
 export interface NotBase<U> {
   type: 'not';
@@ -251,13 +272,18 @@ const NotBase = <U extends t.Any>(c: U) =>
 export interface Not extends NotBase<Clause> {}
 export const Not = t.recursion<Not>('Not', (): t.Type<Not> => NotBase(Clause));
 export interface NotTerm<T extends Primitive> extends NotBase<TermValue<T>> {}
-export const NotTerm = forPrimitives(
+const notTerm = forPrimitives(
   <U extends PrimitiveC>(c: U): t.Type<NotTerm<t.TypeOf<U>>> =>
     t.recursion(
       `NotTerm<${c.name}>`,
-      () => NotBase(TermValue.get(c)!) as t.Type<NotTerm<t.TypeOf<U>>>
+      () => NotBase(TermValue(c)) as t.Type<NotTerm<t.TypeOf<U>>>
     )
 );
+export function NotTerm<T extends PrimitiveC>(
+  c: T
+): t.Type<NotTerm<t.TypeOf<T>>> {
+  return notTerm.get(c)! as t.Type<NotTerm<t.TypeOf<T>>>;
+}
 
 export interface RequiredBase<U> {
   type: 'required';
@@ -275,13 +301,18 @@ export const Required = t.recursion<Required>(
 );
 export interface RequiredTerm<T extends Primitive>
   extends RequiredBase<TermValue<T>> {}
-export const RequiredTerm = forPrimitives(
+const requiredTerm = forPrimitives(
   <U extends PrimitiveC>(c: U): t.Type<RequiredTerm<t.TypeOf<U>>> =>
     t.recursion(
       `RequiredTerm<${c.name}>`,
-      () => RequiredBase(TermValue.get(c)!) as t.Type<RequiredTerm<t.TypeOf<U>>>
+      () => RequiredBase(TermValue(c)) as t.Type<RequiredTerm<t.TypeOf<U>>>
     )
 );
+export function RequiredTerm<T extends PrimitiveC>(
+  c: T
+): t.Type<RequiredTerm<t.TypeOf<T>>> {
+  return requiredTerm.get(c)! as t.Type<RequiredTerm<t.TypeOf<T>>>;
+}
 
 export interface ProhibitedBase<U> {
   type: 'prohibited';
@@ -299,14 +330,18 @@ export const Prohibited = t.recursion<Prohibited>(
 );
 export interface ProhibitedTerm<T extends Primitive>
   extends ProhibitedBase<TermValue<T>> {}
-export const ProhibitedTerm = forPrimitives(
+const prohibitedTerm = forPrimitives(
   <U extends PrimitiveC>(c: U): t.Type<ProhibitedTerm<t.TypeOf<U>>> =>
     t.recursion(
       `ProhibitedTerm<${c.name}>`,
-      () =>
-        ProhibitedBase(TermValue.get(c)!) as t.Type<ProhibitedTerm<t.TypeOf<U>>>
+      () => ProhibitedBase(TermValue(c)) as t.Type<ProhibitedTerm<t.TypeOf<U>>>
     )
 );
+export function ProhibitedTerm<T extends PrimitiveC>(
+  c: T
+): t.Type<ProhibitedTerm<t.TypeOf<T>>> {
+  return prohibitedTerm.get(c)! as t.Type<ProhibitedTerm<t.TypeOf<T>>>;
+}
 
 export interface ConstantScore {
   type: 'constant';
@@ -329,35 +364,48 @@ export type NonPrimitiveTermValue<T extends Primitive> =
   | NotTerm<T>
   | RequiredTerm<T>
   | ProhibitedTerm<T>;
-export const NonPrimitiveTermValue = forPrimitives(
+const nonPrimitiveTermValue = forPrimitives(
   <T extends PrimitiveC>(c: T): t.Type<NonPrimitiveTermValue<t.TypeOf<T>>> =>
     t.recursion(
       `NonPrimitiveTermValue<${c.name}>`,
       () =>
         t.union([
-          AndTerm.get(c)!,
-          OrTerm.get(c)!,
-          NotTerm.get(c)!,
-          RequiredTerm.get(c)!,
-          ProhibitedTerm.get(c)!,
+          AndTerm(c),
+          OrTerm(c),
+          NotTerm(c),
+          RequiredTerm(c),
+          ProhibitedTerm(c),
         ]) as t.Type<NonPrimitiveTermValue<t.TypeOf<T>>>
     )
 );
+export function NonPrimitiveTermValue<T extends PrimitiveC>(
+  c: T
+): t.Type<NonPrimitiveTermValue<t.TypeOf<T>>> {
+  return nonPrimitiveTermValue.get(c)! as t.Type<
+    NonPrimitiveTermValue<t.TypeOf<T>>
+  >;
+}
 
 export interface NamedTerm<T extends Primitive> {
   type: 'namedterm';
   field: string;
   value: TermValue<T>;
 }
-export const NamedTerm = forPrimitives(<T extends PrimitiveC>(c: T) =>
-  t.type({
-    type: t.literal('namedterm'),
-    field: t.string,
-    value: TermValue.get(c)!,
-  })
+const namedTerm = forPrimitives(
+  <T extends PrimitiveC>(c: T) =>
+    t.type({
+      type: t.literal('namedterm'),
+      field: t.string,
+      value: TermValue(c),
+    }) as t.Type<NamedTerm<t.TypeOf<T>>>
 );
+export function NamedTerm<T extends PrimitiveC>(
+  c: T
+): t.Type<NamedTerm<t.TypeOf<T>>> {
+  return namedTerm.get(c)! as t.Type<NamedTerm<t.TypeOf<T>>>;
+}
 export type SomeNamedTerm = t.Type<NamedTerm<Primitive>>;
-export const AnyNamedTerm = t.union(Array.from(NamedTerm).map(x => x[1]) as [
+export const AnyNamedTerm = t.union(Array.from(namedTerm).map(x => x[1]) as [
   SomeNamedTerm,
   SomeNamedTerm,
   ...SomeNamedTerm[]
@@ -368,14 +416,18 @@ export interface Term<T extends Primitive> {
   type: 'term';
   value: TermValue<T>;
 }
-export const Term = forPrimitives(<T extends PrimitiveC>(c: T) =>
-  t.type({
-    type: t.literal('term'),
-    value: TermValue.get(c)!,
-  })
+const term = forPrimitives(
+  <T extends PrimitiveC>(c: T) =>
+    t.type({
+      type: t.literal('term'),
+      value: TermValue(c),
+    }) as t.Type<Term<t.TypeOf<T>>>
 );
+export function Term<T extends PrimitiveC>(c: T): t.Type<Term<t.TypeOf<T>>> {
+  return term.get(c)! as t.Type<Term<t.TypeOf<T>>>;
+}
 export type SomeTerm = t.Type<Term<Primitive>>;
-export const AnyTerm = t.union(Array.from(Term).map(x => x[1]) as [
+export const AnyTerm = t.union(Array.from(term).map(x => x[1]) as [
   SomeTerm,
   SomeTerm,
   ...SomeTerm[]
@@ -402,14 +454,14 @@ export const Clause = t.recursion<Clause>(
   'Clause',
   () =>
     t.union([
-      Term.get(LString)!,
-      Term.get(LNumber)!,
-      Term.get(LDate)!,
-      Term.get(Spatial)!,
-      NamedTerm.get(LString)!,
-      NamedTerm.get(LNumber)!,
-      NamedTerm.get(LDate)!,
-      NamedTerm.get(Spatial)!,
+      Term(LString),
+      Term(LNumber),
+      Term(LDate),
+      Term(Spatial),
+      NamedTerm(LString),
+      NamedTerm(LNumber),
+      NamedTerm(LDate),
+      NamedTerm(Spatial),
       ConstantScore,
       And,
       Or,
@@ -420,10 +472,10 @@ export const Clause = t.recursion<Clause>(
 );
 
 export const AnyTermValue = t.union([
-  TermValue.get(LNumber)!,
-  TermValue.get(LDate)!,
-  TermValue.get(LString)!,
-  TermValue.get(Spatial)!,
+  TermValue(LString),
+  TermValue(LNumber),
+  TermValue(LDate),
+  TermValue(Spatial),
 ]);
 export type AnyTermValue = t.TypeOf<typeof AnyTermValue>;
 
