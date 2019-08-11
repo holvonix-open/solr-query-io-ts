@@ -5,7 +5,7 @@ import { either } from 'fp-ts/lib/Either';
 import {
   Primitive,
   Range,
-  Spatial,
+  LSpatial,
   RangedPrimitive,
   QueryElement,
 } from './types';
@@ -34,7 +34,7 @@ function nope(): never {
   throw new Error('unsupported');
 }
 
-function wkt(g: Spatial['value']['geom']): WKT {
+function wkt(g: LSpatial['value']['geom']): WKT {
   const d = wktio.WKTStringFromGeometry.decode(g);
   /* istanbul ignore if */
   if (!isRight(d)) {
@@ -60,7 +60,7 @@ function toLiteralString<T extends Primitive>(
       return (c as Date).toISOString();
     case 'spatial':
       return quoteString(
-        `${(c as Spatial['value']).op}(${wkt((c as Spatial['value']).geom)})`
+        `${(c as LSpatial['value']).op}(${wkt((c as LSpatial['value']).geom)})`
       );
     case 'glob':
       return escapedGlob(c as string);

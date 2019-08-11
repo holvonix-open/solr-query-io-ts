@@ -15,7 +15,7 @@ import {
   Term,
   TermValue,
   Range,
-  Spatial,
+  LSpatial,
   NotBase,
   RequiredBase,
   Required,
@@ -23,7 +23,7 @@ import {
   ProhibitedBase,
   AndBase,
   OrBase,
-  Glob,
+  LGlob,
   LString,
   LDate,
   LNumber,
@@ -64,7 +64,7 @@ export function LL<T extends Primitive>(value: T): Literal<T> {
   };
 }
 
-export function glob(value: string): Literal<Glob> {
+export function glob(value: string): Literal<LGlob> {
   return LL({
     type: 'glob',
     value,
@@ -74,7 +74,7 @@ export function glob(value: string): Literal<Glob> {
 export function defaultTerm(value: TermValue<LString>): Term<LString>;
 export function defaultTerm(value: TermValue<LNumber>): Term<LNumber>;
 export function defaultTerm(value: TermValue<LDate>): Term<LDate>;
-export function defaultTerm(value: TermValue<Spatial>): Term<Spatial>;
+export function defaultTerm(value: TermValue<LSpatial>): Term<LSpatial>;
 export function defaultTerm<T extends Primitive>(value: TermValue<T>): Term<T> {
   return {
     type: 'term',
@@ -93,8 +93,8 @@ export function term(
 export function term(field: string, value: TermValue<LDate>): NamedTerm<LDate>;
 export function term(
   field: string,
-  value: TermValue<Spatial>
-): NamedTerm<Spatial>;
+  value: TermValue<LSpatial>
+): NamedTerm<LSpatial>;
 export function term<T extends Primitive>(
   field: string,
   value: TermValue<T>
@@ -182,7 +182,7 @@ export function closedRange<T extends RangedPrimitive>(
 export function not(rhs: TermValue<LString>): NotTerm<LString>;
 export function not(rhs: TermValue<LNumber>): NotTerm<LNumber>;
 export function not(rhs: TermValue<LDate>): NotTerm<LDate>;
-export function not(rhs: TermValue<Spatial>): NotTerm<Spatial>;
+export function not(rhs: TermValue<LSpatial>): NotTerm<LSpatial>;
 export function not(rhs: Clause): Not;
 export function not<U>(rhs: U): NotBase<U> {
   return {
@@ -194,7 +194,7 @@ export function not<U>(rhs: U): NotBase<U> {
 export function required(rhs: TermValue<LString>): RequiredTerm<LString>;
 export function required(rhs: TermValue<LNumber>): RequiredTerm<LNumber>;
 export function required(rhs: TermValue<LDate>): RequiredTerm<LDate>;
-export function required(rhs: TermValue<Spatial>): RequiredTerm<Spatial>;
+export function required(rhs: TermValue<LSpatial>): RequiredTerm<LSpatial>;
 export function required(rhs: Clause): Required;
 export function required<U>(rhs: U): RequiredBase<U> {
   return {
@@ -206,7 +206,7 @@ export function required<U>(rhs: U): RequiredBase<U> {
 export function prohibited(rhs: TermValue<LString>): ProhibitedTerm<LString>;
 export function prohibited(rhs: TermValue<LNumber>): ProhibitedTerm<LNumber>;
 export function prohibited(rhs: TermValue<LDate>): ProhibitedTerm<LDate>;
-export function prohibited(rhs: TermValue<Spatial>): ProhibitedTerm<Spatial>;
+export function prohibited(rhs: TermValue<LSpatial>): ProhibitedTerm<LSpatial>;
 export function prohibited(rhs: Clause): Prohibited;
 export function prohibited<U>(rhs: U): ProhibitedBase<U> {
   return {
@@ -226,7 +226,7 @@ export function constantScore(lhs: Clause, rhs: number): ConstantScore {
 export function and(...more: Array<TermValue<LString>>): AndTerm<LString>;
 export function and(...more: Array<TermValue<LNumber>>): AndTerm<LNumber>;
 export function and(...more: Array<TermValue<LDate>>): AndTerm<LDate>;
-export function and(...more: Array<TermValue<Spatial>>): AndTerm<Spatial>;
+export function and(...more: Array<TermValue<LSpatial>>): AndTerm<LSpatial>;
 export function and<T>(...more: Clause[]): And;
 export function and<U>(...more: U[]): AndBase<U> {
   return {
@@ -238,7 +238,7 @@ export function and<U>(...more: U[]): AndBase<U> {
 export function or(...more: Array<TermValue<LString>>): OrTerm<LString>;
 export function or(...more: Array<TermValue<LNumber>>): OrTerm<LNumber>;
 export function or(...more: Array<TermValue<LDate>>): OrTerm<LDate>;
-export function or(...more: Array<TermValue<Spatial>>): OrTerm<Spatial>;
+export function or(...more: Array<TermValue<LSpatial>>): OrTerm<LSpatial>;
 export function or(...more: Clause[]): Or;
 export function or<U>(...more: U[]): OrBase<U> {
   return {
