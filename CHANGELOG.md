@@ -1,3 +1,15 @@
+# [4.0.0](https://github.com/holvonix-open/solr-query-io-ts/compare/v3.0.2...v4.0.0) (2019-08-11)
+
+
+### 🌟🚀 Features
+
+* typesafe query element functions ([#23](https://github.com/holvonix-open/solr-query-io-ts/issues/23)) ([cca5047](https://github.com/holvonix-open/solr-query-io-ts/commit/cca5047))
+
+
+### ⚠️ BREAKING CHANGES
+
+* old `[Some]Term.get([PrimitiveCodec])!` now becomes `[SomeTerm]([PrimitiveCodec])` and is now properly type-checked
+
 ## [3.0.2](https://github.com/holvonix-open/solr-query-io-ts/compare/v3.0.1...v3.0.2) (2019-08-10)
 
 
