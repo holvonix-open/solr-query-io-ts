@@ -60,7 +60,13 @@ export const LDate = t.type({
 });
 export type LDate = t.TypeOf<typeof LDate>;
 
-export const PrimitiveTypes = [LNumber, LString, LDate, LGlob, LSpatial];
+export const PrimitiveTypes = [
+  LNumber,
+  LString,
+  LDate,
+  LGlob,
+  LSpatial,
+] as ReadonlyArray<PrimitiveC>;
 export const Primitive = t.union([LNumber, LString, LDate, LGlob, LSpatial]);
 export type PrimitiveC = TypeOfUnion<typeof Primitive>;
 export type Primitive = t.TypeOf<typeof Primitive>;
@@ -113,13 +119,17 @@ const IsGlob = (c: unknown): c is typeof LGlob => c === LGlob;
 const IsRangedPrimitiveC = (c: unknown): c is RangedPrimitiveC =>
   IsLDate(c) || IsLNumber(c) || IsLString(c);
 
-export const GlobPrimitiveTypes = [LGlob, LString, LDate];
+export const GlobPrimitiveTypes = [LGlob, LString, LDate] as ReadonlyArray<
+  GlobPrimitiveC
+>;
 export const GlobPrimitive = t.union([LGlob, LString, LDate]);
 export type GlobPrimitiveC = TypeOfUnion<typeof GlobPrimitive>;
 const IsGlobPrimitiveC = (c: unknown): c is GlobPrimitiveC =>
   IsLDate(c) || IsLString(c) || IsGlob(c);
 
-export const RangedPrimitiveTypes = [LNumber, LString, LDate];
+export const RangedPrimitiveTypes = [LNumber, LString, LDate] as ReadonlyArray<
+  RangedPrimitiveC
+>;
 export const RangedPrimitive = t.union([LNumber, LString, LDate]);
 export type RangedPrimitiveC = TypeOfUnion<typeof RangedPrimitive>;
 export type RangedPrimitive = t.TypeOf<typeof RangedPrimitive>;
