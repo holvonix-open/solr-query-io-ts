@@ -48,7 +48,7 @@ describe('query', () => {
       }
       function verifyEncoder(gg: ExampleGenerator<tt.QueryElement>) {
         for (let index = 0; index < 300; index++) {
-          const p = gg.encode([index, fuzzContext({ maxRecursionHint: 20 })]);
+          const p = gg.encode([index, fuzzContext({ maxRecursionHint: 15 })]);
           qToString(p);
         }
       }
@@ -63,19 +63,19 @@ describe('query', () => {
       it('named terms', async () => {
         const gg = (await fuzzRegistry()).exampleGenerator(tt.AnyNamedTerm);
         verifyEncoder(gg as ExampleGenerator<tt.QueryElement>);
-      });
+      }).timeout(5000);
       it('terms', async () => {
         const gg = (await fuzzRegistry()).exampleGenerator(tt.AnyTerm);
         verifyEncoder(gg as ExampleGenerator<tt.QueryElement>);
-      });
+      }).timeout(5000);
       it('clauses', async () => {
         const gg = (await fuzzRegistry()).exampleGenerator(tt.Clause);
         verifyEncoder(gg as ExampleGenerator<tt.QueryElement>);
-      });
+      }).timeout(5000);
       it('query elements', async () => {
         const gg = (await fuzzRegistry()).exampleGenerator(tt.QueryElement);
         verifyEncoder(gg as ExampleGenerator<tt.QueryElement>);
-      });
+      }).timeout(5000);
     });
 
     describe('throws on bad fuzzed', () => {
