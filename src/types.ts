@@ -13,13 +13,15 @@ export const SpatialOp = t.keyof({
 export type SpatialOp = t.TypeOf<typeof SpatialOp>;
 
 const spatial = <T extends SpatialOp>(s: T) =>
-  t.type({
-    type: t.literal('spatial'),
-    value: t.type({
-      geom: geojson.GeometryObjectIO,
-      op: t.literal(s),
-    }),
-  });
+  t.readonly(
+    t.type({
+      type: t.literal('spatial'),
+      value: t.type({
+        geom: geojson.GeometryObjectIO,
+        op: t.literal(s),
+      }),
+    })
+  );
 
 export const Intersects = spatial('Intersects');
 export type Intersects = t.TypeOf<typeof Intersects>;
@@ -36,28 +38,36 @@ export const LSpatial = t.union([Intersects, IsWithin, Contains, IsDisjointTo]);
 export type SpatialC = TypeOfUnion<typeof LSpatial>;
 export type LSpatial = t.TypeOf<typeof LSpatial>;
 
-export const LGlob = t.type({
-  type: t.literal('glob'),
-  value: t.string,
-});
+export const LGlob = t.readonly(
+  t.type({
+    type: t.literal('glob'),
+    value: t.string,
+  })
+);
 export type LGlob = t.TypeOf<typeof LGlob>;
 
-export const LString = t.type({
-  type: t.literal('string'),
-  value: t.string,
-});
+export const LString = t.readonly(
+  t.type({
+    type: t.literal('string'),
+    value: t.string,
+  })
+);
 export type LString = t.TypeOf<typeof LString>;
 
-export const LNumber = t.type({
-  type: t.literal('number'),
-  value: t.number,
-});
+export const LNumber = t.readonly(
+  t.type({
+    type: t.literal('number'),
+    value: t.number,
+  })
+);
 export type LNumber = t.TypeOf<typeof LNumber>;
 
-export const LDate = t.type({
-  type: t.literal('date'),
-  value: date,
-});
+export const LDate = t.readonly(
+  t.type({
+    type: t.literal('date'),
+    value: date,
+  })
+);
 export type LDate = t.TypeOf<typeof LDate>;
 
 export const PrimitiveTypes = [
@@ -90,10 +100,12 @@ function noPrimitive(c: unknown) {
 }
 
 const literal = forPrimitives(<T extends PrimitiveC>(c: PrimitiveC) =>
-  t.type({
-    type: t.literal('literal'),
-    value: c,
-  })
+  t.readonly(
+    t.type({
+      type: t.literal('literal'),
+      value: c,
+    })
+  )
 );
 export function Literal<T extends PrimitiveC>(
   c: T
@@ -108,8 +120,8 @@ export const AnyLiteral = t.union(Array.from(literal).map(x => x[1]) as [
   ...SomeLiteral[]
 ]);
 export interface Literal<T extends Primitive> {
-  type: 'literal';
-  value: T;
+  readonly type: 'literal';
+  readonly value: T;
 }
 
 const IsLDate = (c: unknown): c is typeof LDate => c === LDate;
@@ -145,18 +157,20 @@ function forRangedPrimitives<A, O, I>(
 }
 
 const range = forRangedPrimitives(<T extends RangedPrimitiveC>(c: T) =>
-  t.intersection([
-    t.type({
-      type: t.literal('range'),
-      valueType: c.props.type,
-      closedLower: t.boolean,
-      closedUpper: t.boolean,
-    }),
-    t.partial({
-      lower: c.props.value,
-      upper: c.props.value,
-    }),
-  ])
+  t.readonly(
+    t.intersection([
+      t.type({
+        type: t.literal('range'),
+        valueType: c.type.props.type,
+        closedLower: t.boolean,
+        closedUpper: t.boolean,
+      }),
+      t.partial({
+        lower: c.type.props.value,
+        upper: c.type.props.value,
+      }),
+    ])
+  )
 );
 export function Range<T extends RangedPrimitiveC>(
   c: T
@@ -170,13 +184,13 @@ export const AnyRange = t.union(Array.from(range).map(x => x[1]) as [
   ...SomeRange[]
 ]);
 export interface Range<T extends RangedPrimitive> {
-  type: 'range';
-  valueType: T['type'];
-  lower?: T['value'];
-  upper?: T['value'];
+  readonly type: 'range';
+  readonly valueType: T['type'];
+  readonly lower?: T['value'];
+  readonly upper?: T['value'];
 
-  closedLower: boolean;
-  closedUpper: boolean;
+  readonly closedLower: boolean;
+  readonly closedUpper: boolean;
 }
 
 export type MaybeGlob<T extends Primitive> = T extends LString
@@ -231,14 +245,16 @@ export function TermValue<T extends PrimitiveC>(
 }
 
 export interface AndBase<U> {
-  type: 'and';
-  operands: U[];
+  readonly type: 'and';
+  readonly operands: U[];
 }
 const AndBase = <U extends t.Any>(c: U) =>
-  t.type({
-    type: t.literal('and'),
-    operands: t.array(c),
-  });
+  t.readonly(
+    t.type({
+      type: t.literal('and'),
+      operands: t.array(c),
+    })
+  );
 export interface And extends AndBase<Clause> {}
 export const And = t.recursion<And>('And', (): t.Type<And> => AndBase(Clause));
 export interface AndTerm<T extends Primitive> extends AndBase<TermValue<T>> {}
@@ -256,14 +272,16 @@ export function AndTerm<T extends PrimitiveC>(
 }
 
 export interface OrBase<U> {
-  type: 'or';
-  operands: U[];
+  readonly type: 'or';
+  readonly operands: U[];
 }
 const OrBase = <U extends t.Any>(c: U) =>
-  t.type({
-    type: t.literal('or'),
-    operands: t.array(c),
-  });
+  t.readonly(
+    t.type({
+      type: t.literal('or'),
+      operands: t.array(c),
+    })
+  );
 export interface Or extends OrBase<Clause> {}
 export const Or = t.recursion<Or>('Or', (): t.Type<Or> => OrBase(Clause));
 export interface OrTerm<T extends Primitive> extends OrBase<TermValue<T>> {}
@@ -281,14 +299,16 @@ export function OrTerm<T extends PrimitiveC>(
 }
 
 export interface NotBase<U> {
-  type: 'not';
-  rhs: U;
+  readonly type: 'not';
+  readonly rhs: U;
 }
 const NotBase = <U extends t.Any>(c: U) =>
-  t.type({
-    type: t.literal('not'),
-    rhs: c,
-  });
+  t.readonly(
+    t.type({
+      type: t.literal('not'),
+      rhs: c,
+    })
+  );
 export interface Not extends NotBase<Clause> {}
 export const Not = t.recursion<Not>('Not', (): t.Type<Not> => NotBase(Clause));
 export interface NotTerm<T extends Primitive> extends NotBase<TermValue<T>> {}
@@ -306,14 +326,16 @@ export function NotTerm<T extends PrimitiveC>(
 }
 
 export interface RequiredBase<U> {
-  type: 'required';
-  rhs: U;
+  readonly type: 'required';
+  readonly rhs: U;
 }
 const RequiredBase = <U extends t.Any>(c: U) =>
-  t.type({
-    type: t.literal('required'),
-    rhs: c,
-  });
+  t.readonly(
+    t.type({
+      type: t.literal('required'),
+      rhs: c,
+    })
+  );
 export interface Required extends RequiredBase<Clause> {}
 export const Required = t.recursion<Required>(
   'Required',
@@ -338,14 +360,16 @@ export function RequiredTerm<T extends PrimitiveC>(
 }
 
 export interface ProhibitedBase<U> {
-  type: 'prohibited';
-  rhs: U;
+  readonly type: 'prohibited';
+  readonly rhs: U;
 }
 const ProhibitedBase = <U extends t.Any>(c: U) =>
-  t.type({
-    type: t.literal('prohibited'),
-    rhs: c,
-  });
+  t.readonly(
+    t.type({
+      type: t.literal('prohibited'),
+      rhs: c,
+    })
+  );
 export interface Prohibited extends ProhibitedBase<Clause> {}
 export const Prohibited = t.recursion<Prohibited>(
   'Prohibited',
@@ -370,18 +394,20 @@ export function ProhibitedTerm<T extends PrimitiveC>(
 }
 
 export interface ConstantScore {
-  type: 'constant';
-  lhs: Clause;
-  rhs: number;
+  readonly type: 'constant';
+  readonly lhs: Clause;
+  readonly rhs: number;
 }
 export const ConstantScore = t.recursion<ConstantScore>(
   'ConstantScore',
   (): t.Type<ConstantScore> =>
-    t.type({
-      type: t.literal('constant'),
-      lhs: Clause,
-      rhs: t.number,
-    })
+    t.readonly(
+      t.type({
+        type: t.literal('constant'),
+        lhs: Clause,
+        rhs: t.number,
+      })
+    )
 );
 
 export type NonPrimitiveTermValue<T extends Primitive> =
@@ -415,17 +441,19 @@ export function NonPrimitiveTermValue<T extends PrimitiveC>(
 }
 
 export interface NamedTerm<T extends Primitive> {
-  type: 'namedterm';
-  field: string;
-  value: TermValue<T>;
+  readonly type: 'namedterm';
+  readonly field: string;
+  readonly value: TermValue<T>;
 }
 const namedTerm = forPrimitives(
   <T extends PrimitiveC>(c: T) =>
-    t.type({
-      type: t.literal('namedterm'),
-      field: t.string,
-      value: TermValue(c),
-    }) as t.Type<NamedTerm<t.TypeOf<T>>>
+    t.readonly(
+      t.type({
+        type: t.literal('namedterm'),
+        field: t.string,
+        value: TermValue(c),
+      })
+    ) as t.Type<NamedTerm<t.TypeOf<T>>>
 );
 export function NamedTerm<T extends PrimitiveC>(
   c: T
@@ -443,15 +471,17 @@ export const AnyNamedTerm = t.union(Array.from(namedTerm).map(x => x[1]) as [
 export type AnyNamedTerm = t.TypeOf<typeof AnyNamedTerm>;
 
 export interface Term<T extends Primitive> {
-  type: 'term';
-  value: TermValue<T>;
+  readonly type: 'term';
+  readonly value: TermValue<T>;
 }
 const term = forPrimitives(
   <T extends PrimitiveC>(c: T) =>
-    t.type({
-      type: t.literal('term'),
-      value: TermValue(c),
-    }) as t.Type<Term<t.TypeOf<T>>>
+    t.readonly(
+      t.type({
+        type: t.literal('term'),
+        value: TermValue(c),
+      })
+    ) as t.Type<Term<t.TypeOf<T>>>
 );
 export function Term<T extends PrimitiveC>(c: T): t.Type<Term<t.TypeOf<T>>> {
   return (term.get(c)! as t.Type<Term<t.TypeOf<T>>>) || noPrimitive(c);
