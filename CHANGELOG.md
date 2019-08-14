@@ -1,3 +1,33 @@
+# [6.0.0](https://github.com/holvonix-open/solr-query-io-ts/compare/v5.0.0...v6.0.0) (2019-08-14)
+
+
+### 🌟🚀 Features
+
+* implement simple query model for user-provided input ([0c99875](https://github.com/holvonix-open/solr-query-io-ts/commit/0c99875))
+
+
+### 🐛 Bug Fixes
+
+* enforce arrays of types to be readonly ([fe8f833](https://github.com/holvonix-open/solr-query-io-ts/commit/fe8f833))
+* make all types shallow immutable ([260f218](https://github.com/holvonix-open/solr-query-io-ts/commit/260f218))
+
+
+### 📖 Documentation
+
+* delete legacy bug template ([b05fa50](https://github.com/holvonix-open/solr-query-io-ts/commit/b05fa50))
+
+
+### 🧦 Miscellaneous
+
+* **deps-dev:** bump @holvonix-open/release-config-js ([#26](https://github.com/holvonix-open/solr-query-io-ts/issues/26)) ([a36e00c](https://github.com/holvonix-open/solr-query-io-ts/commit/a36e00c))
+* stale settings ([29f8ad1](https://github.com/holvonix-open/solr-query-io-ts/commit/29f8ad1))
+* **deps-dev:** bump @holvonix-open/release-config-js ([#27](https://github.com/holvonix-open/solr-query-io-ts/issues/27)) ([0179a3e](https://github.com/holvonix-open/solr-query-io-ts/commit/0179a3e))
+
+
+### ⚠️ BREAKING CHANGES
+
+* all types are now shallow immutable (Readonly<>)
+
 # [5.0.0](https://github.com/holvonix-open/solr-query-io-ts/compare/v4.0.0...v5.0.0) (2019-08-11)
 
 
