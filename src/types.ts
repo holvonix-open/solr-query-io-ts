@@ -1,6 +1,12 @@
 import * as t from 'io-ts';
 import { date } from 'io-ts-types/lib/date';
 import * as geojson from '@holvonix-open/geojson-io-ts';
+import {
+  forPrimitives,
+  noPrimitive,
+  IsGlobPrimitiveC,
+  IsRangedPrimitiveC,
+} from './utils';
 
 /* tslint:disable:variable-name */
 
@@ -82,22 +88,13 @@ export type PrimitiveC = TypeOfUnion<typeof Primitive>;
 export type Primitive = t.TypeOf<typeof Primitive>;
 export type PrimitiveValueType = Primitive['value'];
 
-function forPrimitives<A, O = A, I = unknown>(
-  f: <T extends PrimitiveC>(c: T) => t.Type<A, O, I>
-): ReadonlyMap<PrimitiveC, t.Type<A, O, I>> {
-  const e = PrimitiveTypes.map<[PrimitiveC, t.Type<A, O, I>]>(x => {
-    return [x, f(x)];
-  });
-  return new Map(e);
-}
-function noPrimitive(c: unknown) {
-  if (LSpatial.types.indexOf(c as (typeof LSpatial)['types']['0']) >= 0) {
-    throw new RangeError(
-      'SQM005: Use `LSpatial` instead of an individual spatial operator.'
-    );
-  }
-  throw new RangeError('SQM004: Unsupported primitive codec');
-}
+export type PrimitiveType<T> = T extends number
+  ? LNumber
+  : T extends string
+  ? LString
+  : T extends Date
+  ? LDate
+  : never;
 
 const literal = forPrimitives(<T extends PrimitiveC>(c: PrimitiveC) =>
   t.readonly(
@@ -124,20 +121,13 @@ export interface Literal<T extends Primitive> {
   readonly value: T;
 }
 
-const IsLDate = (c: unknown): c is typeof LDate => c === LDate;
-const IsLString = (c: unknown): c is typeof LString => c === LString;
-const IsLNumber = (c: unknown): c is typeof LNumber => c === LNumber;
-const IsGlob = (c: unknown): c is typeof LGlob => c === LGlob;
-const IsRangedPrimitiveC = (c: unknown): c is RangedPrimitiveC =>
-  IsLDate(c) || IsLNumber(c) || IsLString(c);
-
 export const GlobPrimitiveTypes = [LGlob, LString, LDate] as ReadonlyArray<
   GlobPrimitiveC
 >;
 export const GlobPrimitive = t.union([LGlob, LString, LDate]);
 export type GlobPrimitiveC = TypeOfUnion<typeof GlobPrimitive>;
-const IsGlobPrimitiveC = (c: unknown): c is GlobPrimitiveC =>
-  IsLDate(c) || IsLString(c) || IsGlob(c);
+export type GlobPrimitive = t.TypeOf<typeof GlobPrimitive>;
+export type GlobPrimitiveValueType = GlobPrimitive['value'];
 
 export const RangedPrimitiveTypes = [LNumber, LString, LDate] as ReadonlyArray<
   RangedPrimitiveC
@@ -193,19 +183,11 @@ export interface Range<T extends RangedPrimitive> {
   readonly closedUpper: boolean;
 }
 
-export type MaybeGlob<T extends Primitive> = T extends LString
-  ? Literal<LGlob>
-  : T extends LDate
-  ? Literal<LGlob>
-  : T extends LGlob
+export type MaybeGlob<T extends Primitive> = T extends GlobPrimitive
   ? Literal<LGlob>
   : never;
 
-export type MaybeRange<T extends Primitive> = T extends LString
-  ? Range<T>
-  : T extends LDate
-  ? Range<T>
-  : T extends LNumber
+export type MaybeRange<T extends Primitive> = T extends RangedPrimitive
   ? Range<T>
   : never;
 
