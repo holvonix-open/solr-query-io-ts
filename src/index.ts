@@ -22,8 +22,9 @@ Dependencies may have their own licenses.
 */
 
 import * as Q from './Q';
+import * as simple from './simple';
 
 export * from './types';
 export * from './query';
 
-export { Q };
+export { Q, simple };

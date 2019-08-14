@@ -28,6 +28,8 @@ import {
   LDate,
   LNumber,
   RangedPrimitive,
+  PrimitiveType,
+  RangedPrimitiveValueType,
 } from './types';
 
 import * as util from 'util';
@@ -53,6 +55,7 @@ function LT<T extends Primitive>(value: T['value']): T['type'] {
 export function L(value: string): Literal<LString>;
 export function L(value: number): Literal<LNumber>;
 export function L(value: Date): Literal<LDate>;
+export function L<T>(value: T): Literal<PrimitiveType<T>>;
 export function L<T extends Primitive>(value: T['value']): Literal<T> {
   return LL<T>({ type: LT(value), value } as T);
 }
@@ -124,6 +127,12 @@ export function range(
   lower?: Date,
   upper?: Date
 ): Range<LDate>;
+export function range<T extends RangedPrimitiveValueType>(
+  closedLower: boolean,
+  closedUpper: boolean,
+  lower?: T,
+  upper?: T
+): Range<PrimitiveType<T>>;
 export function range<T extends RangedPrimitive>(
   closedLower: boolean,
   closedUpper: boolean,
@@ -162,6 +171,10 @@ function rangeImpl<T extends RangedPrimitive>(
 export function openRange(lower?: string, upper?: string): Range<LString>;
 export function openRange(lower?: number, upper?: number): Range<LNumber>;
 export function openRange(lower?: Date, upper?: Date): Range<LDate>;
+export function openRange<T extends RangedPrimitiveValueType>(
+  lower?: T,
+  upper?: T
+): Range<PrimitiveType<T>>;
 export function openRange<T extends RangedPrimitive>(
   lower?: T['value'],
   upper?: T['value']
@@ -172,6 +185,10 @@ export function openRange<T extends RangedPrimitive>(
 export function closedRange(lower?: string, upper?: string): Range<LString>;
 export function closedRange(lower?: number, upper?: number): Range<LNumber>;
 export function closedRange(lower?: Date, upper?: Date): Range<LDate>;
+export function closedRange<T extends RangedPrimitiveValueType>(
+  lower?: T,
+  upper?: T
+): Range<PrimitiveType<T>>;
 export function closedRange<T extends RangedPrimitive>(
   lower?: T['value'],
   upper?: T['value']
@@ -183,6 +200,9 @@ export function not(rhs: TermValue<LString>): NotTerm<LString>;
 export function not(rhs: TermValue<LNumber>): NotTerm<LNumber>;
 export function not(rhs: TermValue<LDate>): NotTerm<LDate>;
 export function not(rhs: TermValue<LSpatial>): NotTerm<LSpatial>;
+export function not<T>(
+  rhs: TermValue<PrimitiveType<T>>
+): NotTerm<PrimitiveType<T>>;
 export function not(rhs: Clause): Not;
 export function not<U>(rhs: U): NotBase<U> {
   return {
@@ -195,6 +215,9 @@ export function required(rhs: TermValue<LString>): RequiredTerm<LString>;
 export function required(rhs: TermValue<LNumber>): RequiredTerm<LNumber>;
 export function required(rhs: TermValue<LDate>): RequiredTerm<LDate>;
 export function required(rhs: TermValue<LSpatial>): RequiredTerm<LSpatial>;
+export function required<T>(
+  rhs: TermValue<PrimitiveType<T>>
+): RequiredTerm<PrimitiveType<T>>;
 export function required(rhs: Clause): Required;
 export function required<U>(rhs: U): RequiredBase<U> {
   return {
@@ -207,6 +230,9 @@ export function prohibited(rhs: TermValue<LString>): ProhibitedTerm<LString>;
 export function prohibited(rhs: TermValue<LNumber>): ProhibitedTerm<LNumber>;
 export function prohibited(rhs: TermValue<LDate>): ProhibitedTerm<LDate>;
 export function prohibited(rhs: TermValue<LSpatial>): ProhibitedTerm<LSpatial>;
+export function prohibited<T>(
+  rhs: TermValue<PrimitiveType<T>>
+): ProhibitedTerm<PrimitiveType<T>>;
 export function prohibited(rhs: Clause): Prohibited;
 export function prohibited<U>(rhs: U): ProhibitedBase<U> {
   return {
@@ -227,7 +253,10 @@ export function and(...more: Array<TermValue<LString>>): AndTerm<LString>;
 export function and(...more: Array<TermValue<LNumber>>): AndTerm<LNumber>;
 export function and(...more: Array<TermValue<LDate>>): AndTerm<LDate>;
 export function and(...more: Array<TermValue<LSpatial>>): AndTerm<LSpatial>;
-export function and<T>(...more: Clause[]): And;
+export function and<T>(
+  ...more: Array<TermValue<PrimitiveType<T>>>
+): AndTerm<PrimitiveType<T>>;
+export function and(...more: Clause[]): And;
 export function and<U>(...more: U[]): AndBase<U> {
   return {
     type: 'and',
@@ -239,6 +268,9 @@ export function or(...more: Array<TermValue<LString>>): OrTerm<LString>;
 export function or(...more: Array<TermValue<LNumber>>): OrTerm<LNumber>;
 export function or(...more: Array<TermValue<LDate>>): OrTerm<LDate>;
 export function or(...more: Array<TermValue<LSpatial>>): OrTerm<LSpatial>;
+export function or<T>(
+  ...more: Array<TermValue<PrimitiveType<T>>>
+): OrTerm<PrimitiveType<T>>;
 export function or(...more: Clause[]): Or;
 export function or<U>(...more: U[]): OrBase<U> {
   return {
