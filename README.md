@@ -16,10 +16,14 @@
 After `yarn add solr-query-io-ts`:
 
 ```typescript
-import { Q, SolrQueryFromElement, simple } from 'solr-query-io-ts';
+import {
+  Q,
+  QueryElement,
+  SolrQueryFromElement,
+  simple,
+} from 'solr-query-io-ts';
 import { inspect } from 'util';
 import { Right } from 'fp-ts/lib/Either';
-import { QueryElement } from '../../src';
 
 // Build up a query using the 'Q' module.
 function makeQuery() {
