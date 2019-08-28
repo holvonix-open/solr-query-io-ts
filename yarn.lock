@@ -2337,9 +2337,9 @@ invert-kv@^2.0.0:
   integrity sha512-wPVv/y/QQ/Uiirj/vh3oP+1Ww+AWehmi1g5fFWGPF6IpCBCDVrhgHRMvrLfdYcwDh3QJbGXDW4JAuzxElLSqKA==
 
 io-ts-fuzzer@^4.1.1:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/io-ts-fuzzer/-/io-ts-fuzzer-4.3.0.tgz#267db605829a7e2411bb382b3572ae01cc00efce"
-  integrity sha512-ecYp7GeXcX6alcSiLckVfmAjEebgwq5ZZBIeWXrvDbs1WUcq0tUUGiRTx8dzh8WbgWtar+MRR5aORdLsB2w+Eg==
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/io-ts-fuzzer/-/io-ts-fuzzer-4.3.1.tgz#a1762c0def56dc3290153635684dd5be2242d4aa"
+  integrity sha512-OmW/joevixeMI6wI0OBBxnned9otBkuzt9W6tWNobKnfX+EtmHQqMCuzyk2+1EPvp7VXWs02Vvl7KrIHnjxtyA==
   dependencies:
     "@types/seedrandom" "^2.4.28"
     seedrandom "^3.0.1"
