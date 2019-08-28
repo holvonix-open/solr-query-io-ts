@@ -1,3 +1,25 @@
+## [6.0.1](https://github.com/holvonix-open/solr-query-io-ts/compare/v6.0.0...v6.0.1) (2019-08-28)
+
+
+### 🐛 Bug Fixes
+
+* **deps-dev:** bump @types/node from 12.7.1 to 12.7.2 ([#29](https://github.com/holvonix-open/solr-query-io-ts/issues/29)) ([bdd2407](https://github.com/holvonix-open/solr-query-io-ts/commit/bdd2407))
+
+
+### 📖 Documentation
+
+* example typo ([f74e5d9](https://github.com/holvonix-open/solr-query-io-ts/commit/f74e5d9))
+
+
+### 🧦 Miscellaneous
+
+* **deps-dev:** bump @holvonix-open/release-config-js ([#32](https://github.com/holvonix-open/solr-query-io-ts/issues/32)) ([c3b6d82](https://github.com/holvonix-open/solr-query-io-ts/commit/c3b6d82))
+* **deps-dev:** bump concurrently from 4.1.1 to 4.1.2 ([a1dc390](https://github.com/holvonix-open/solr-query-io-ts/commit/a1dc390))
+* **deps-dev:** bump husky from 3.0.3 to 3.0.4 ([0f9a512](https://github.com/holvonix-open/solr-query-io-ts/commit/0f9a512))
+* **deps-dev:** bump io-ts-fuzzer from 4.1.3 to 4.3.0 ([235d78c](https://github.com/holvonix-open/solr-query-io-ts/commit/235d78c))
+* **deps-dev:** bump io-ts-fuzzer from 4.3.0 to 4.3.1 ([#35](https://github.com/holvonix-open/solr-query-io-ts/issues/35)) ([59278be](https://github.com/holvonix-open/solr-query-io-ts/commit/59278be))
+* **deps-dev:** bump typescript from 3.5.3 to 3.6.2 ([d7a1dcf](https://github.com/holvonix-open/solr-query-io-ts/commit/d7a1dcf))
+
 # [6.0.0](https://github.com/holvonix-open/solr-query-io-ts/compare/v5.0.0...v6.0.0) (2019-08-14)
 
 
