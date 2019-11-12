@@ -31,7 +31,6 @@ describe('query', () => {
       return v.right;
     }
     assert.fail(PathReporter.report(v).join(';'));
-    throw new Error();
   };
   const lhs = Q.defaultTerm(Q.L('LHS'));
   const rhs = Q.defaultTerm(Q.L('RHS'));
