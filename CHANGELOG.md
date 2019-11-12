@@ -1,3 +1,16 @@
+## [6.0.2](https://github.com/holvonix-open/solr-query-io-ts/compare/v6.0.1...v6.0.2) (2019-11-12)
+
+
+### 🐛 Bug Fixes
+
+* **deps:** @holvonix-open/release-config-js@1.0.12, @types/nock@11.1.0, @types/node@12.12.7, chokidar-cli@2.1.0, codecov@3.6.1, concurrently@5.0.0, husky@3.0.9, io-ts-fuzzer@4.3.2, mocha@6.2.2, nock@11.7.0, source-map-support@0.5.16, typescript@3.7.2, fp-ts@2.1.2, io-ts-types@0.5.2, wkt-io-ts@1.0.2 ([#91](https://github.com/holvonix-open/solr-query-io-ts/issues/91)) ([f82097e](https://github.com/holvonix-open/solr-query-io-ts/commit/f82097e))
+
+
+### 🧦 Miscellaneous
+
+* **deps:** bump io-ts-types from 0.5.0 to 0.5.1 ([#47](https://github.com/holvonix-open/solr-query-io-ts/issues/47)) ([6b7e674](https://github.com/holvonix-open/solr-query-io-ts/commit/6b7e674))
+* **deps-dev:** bump @holvonix-open/release-config-js ([#56](https://github.com/holvonix-open/solr-query-io-ts/issues/56)) ([b188c09](https://github.com/holvonix-open/solr-query-io-ts/commit/b188c09))
+
 ## [6.0.1](https://github.com/holvonix-open/solr-query-io-ts/compare/v6.0.0...v6.0.1) (2019-08-28)
 
 
