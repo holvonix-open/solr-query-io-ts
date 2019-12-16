@@ -109,7 +109,7 @@
     "@holvonix-open/geojson-io-ts": "^5.0.0",
     "fp-ts": "^2.1.2",
     "io-ts": "^2.0.1",
-    "io-ts-types": "^0.5.2",
+    "io-ts-types": "^0.5.3",
     "monocle-ts": "^2.0.0",
     "wkt-io-ts": "^1.0.2"
   },
