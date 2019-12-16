@@ -114,7 +114,7 @@
     "wkt-io-ts": "^1.0.2"
   },
   "devDependencies": {
-    "@holvonix-open/release-config-js": "^1.0.12",
+    "@holvonix-open/release-config-js": "^1.0.13",
     "@types/mocha": "^5.2.5",
     "@types/nock": "^11.1.0",
     "@types/node": "^12.12.7",
