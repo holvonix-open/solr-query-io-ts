@@ -21,7 +21,7 @@ export function forPrimitives<A, O = A, I = unknown>(
   return new Map(e);
 }
 export function noPrimitive(c: unknown) {
-  if (LSpatial.types.indexOf(c as (typeof LSpatial)['types']['0']) >= 0) {
+  if (LSpatial.types.indexOf(c as typeof LSpatial['types']['0']) >= 0) {
     throw new RangeError(
       'SQM005: Use `LSpatial` instead of an individual spatial operator.'
     );

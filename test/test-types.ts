@@ -9,7 +9,13 @@ import { Polygon } from '@holvonix-open/geojson-io-ts';
 describe('types', () => {
   const geo: Polygon = {
     type: 'Polygon',
-    coordinates: [[[20, 30], [0, 0], [20, 30]]],
+    coordinates: [
+      [
+        [20, 30],
+        [0, 0],
+        [20, 30],
+      ],
+    ],
   };
   describe('codec verification', () => {
     describe('Range', () => {
