@@ -111,11 +111,13 @@ export function Literal<T extends PrimitiveC>(
 }
 
 export type SomeLiteral = t.Type<Literal<Primitive>>;
-export const AnyLiteral = t.union(Array.from(literal).map(x => x[1]) as [
-  SomeLiteral,
-  SomeLiteral,
-  ...SomeLiteral[]
-]);
+export const AnyLiteral = t.union(
+  Array.from(literal).map(x => x[1]) as [
+    SomeLiteral,
+    SomeLiteral,
+    ...SomeLiteral[]
+  ]
+);
 export interface Literal<T extends Primitive> {
   readonly type: 'literal';
   readonly value: T;
@@ -168,11 +170,9 @@ export function Range<T extends RangedPrimitiveC>(
   return (range.get(c)! as t.Type<Range<t.TypeOf<T>>>) || noPrimitive(c);
 }
 export type SomeRange = t.Type<Range<RangedPrimitive>>;
-export const AnyRange = t.union(Array.from(range).map(x => x[1]) as [
-  SomeRange,
-  SomeRange,
-  ...SomeRange[]
-]);
+export const AnyRange = t.union(
+  Array.from(range).map(x => x[1]) as [SomeRange, SomeRange, ...SomeRange[]]
+);
 export interface Range<T extends RangedPrimitive> {
   readonly type: 'range';
   readonly valueType: T['type'];
@@ -445,11 +445,13 @@ export function NamedTerm<T extends PrimitiveC>(
   );
 }
 export type SomeNamedTerm = t.Type<NamedTerm<Primitive>>;
-export const AnyNamedTerm = t.union(Array.from(namedTerm).map(x => x[1]) as [
-  SomeNamedTerm,
-  SomeNamedTerm,
-  ...SomeNamedTerm[]
-]);
+export const AnyNamedTerm = t.union(
+  Array.from(namedTerm).map(x => x[1]) as [
+    SomeNamedTerm,
+    SomeNamedTerm,
+    ...SomeNamedTerm[]
+  ]
+);
 export type AnyNamedTerm = t.TypeOf<typeof AnyNamedTerm>;
 
 export interface Term<T extends Primitive> {
@@ -469,11 +471,9 @@ export function Term<T extends PrimitiveC>(c: T): t.Type<Term<t.TypeOf<T>>> {
   return (term.get(c)! as t.Type<Term<t.TypeOf<T>>>) || noPrimitive(c);
 }
 export type SomeTerm = t.Type<Term<Primitive>>;
-export const AnyTerm = t.union(Array.from(term).map(x => x[1]) as [
-  SomeTerm,
-  SomeTerm,
-  ...SomeTerm[]
-]);
+export const AnyTerm = t.union(
+  Array.from(term).map(x => x[1]) as [SomeTerm, SomeTerm, ...SomeTerm[]]
+);
 export type AnyTerm = t.TypeOf<typeof AnyTerm>;
 
 export type Clause =
