@@ -128,7 +128,7 @@
     "nock": "^11.7.0",
     "nyc": "^15.0.0",
     "source-map-support": "^0.5.16",
-    "ts-mocha": "^6.0.0",
+    "ts-mocha": "^7.0.0",
     "typescript": "~3.7.2"
   }
 }
