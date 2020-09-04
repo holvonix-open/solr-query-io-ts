@@ -117,7 +117,7 @@
     "@holvonix-open/release-config-js": "^1.0.12",
     "@types/mocha": "^5.2.5",
     "@types/nock": "^11.1.0",
-    "@types/node": "^12.12.7",
+    "@types/node": "^14.6.4",
     "chokidar-cli": "^2.1.0",
     "codecov": "^3.6.1",
     "concurrently": "^5.0.0",
