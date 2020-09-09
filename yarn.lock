@@ -2478,15 +2478,10 @@ io-ts-fuzzer@^4.3.2:
     "@types/seedrandom" "^2.4.28"
     seedrandom "^3.0.1"
 
-io-ts-types@^0.5.0:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/io-ts-types/-/io-ts-types-0.5.1.tgz#55bedec94e3cce1413d60c014918091d0dffbbce"
-  integrity sha512-wdlK7Gn9gBaI3BT44mpwU+Y54J3GTT5R3dkM7CYZoaPMKWDwp/jYZ1Bj8/RRfcwP2ElJjuGre06avjkHLvgl7w==
-
-io-ts-types@^0.5.3:
-  version "0.5.3"
-  resolved "https://registry.yarnpkg.com/io-ts-types/-/io-ts-types-0.5.3.tgz#c9421e051cc380fb73f8a5d099ba85655aa98728"
-  integrity sha512-n49taXKrh60QTmbfPEQGuuHAawansXCrcqGDv+KmZkj0Xnf4ulR1jlSNXmHPVqJ74owLO4u1XMv1EVBmAFPSYw==
+io-ts-types@^0.5.0, io-ts-types@^0.5.3:
+  version "0.5.11"
+  resolved "https://registry.yarnpkg.com/io-ts-types/-/io-ts-types-0.5.11.tgz#475e8680bfacee05f450c64f3b0b89f4a790dd58"
+  integrity sha512-BqWYAvcSOxnKWIAYAcqF6nS+zhWRb6W+oezF2FzFt8+5a6b8PHNXmbOiV3MwRDY1G6FIctMo71QtIrExLT7LCQ==
 
 io-ts@^2.0.1:
   version "2.0.1"
